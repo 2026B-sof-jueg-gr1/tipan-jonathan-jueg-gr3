@@ -1,0 +1,133 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#F6EFE3', flexDirection: 'column' }}>
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#A6402A' }}>
+        MARCO LEGAL Y CRÉDITOS
+    </Text>
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 36,
+        fontWeight: 'bold',
+        color: '#201709',
+        lineHeight: 1.2,
+        marginTop: 8,
+    }}>
+        Lo que el juego es y de quién es cada pieza
+    </Text>
+    <Box style={{ height: 1, background: '#D6C7AE', marginTop: 16, marginBottom: 32 }} />
+
+    <Box style={{ flexDirection: 'row', gap: 44, flex: 1 }}>
+        <Box style={{ width: 470, flexDirection: 'column' }}>
+            <Box style={{ flexDirection: 'row', gap: 24, alignItems: 'flex-start' }}>
+                <Box style={{
+                    width: 96,
+                    height: 120,
+                    border: '3px solid #201709',
+                    background: '#FFFFFF',
+                    flexDirection: 'column',
+                }}>
+                    <Box style={{ height: 92, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ fontFamily: "Georgia, serif", fontSize: 52, fontWeight: 'bold', color: '#201709', lineHeight: 1 }}>
+                            3
+                        </Text>
+                    </Box>
+                    <Box style={{ height: 22, background: '#201709', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 11, letterSpacing: 2, color: '#F6EFE3' }}>
+                            PEGI
+                        </Text>
+                    </Box>
+                </Box>
+                <Box style={{ width: 350, flexDirection: 'column' }}>
+                    <Text style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 'bold', color: '#201709', lineHeight: 1.25 }}>
+                        Clasificación propuesta: PEGI 3
+                    </Text>
+                    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.55, color: '#8B7860', marginTop: 8 }}>
+                        Insignia propia, no el logotipo oficial de PEGI.
+                    </Text>
+                </Box>
+            </Box>
+
+            <Box style={{ flexDirection: 'column', marginTop: 30 }}>
+                <Box style={{ flexDirection: 'row', gap: 16, paddingTop: 16, paddingBottom: 16, borderTop: '1px solid #D6C7AE' }}>
+                    <Text style={{ width: 150, fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 1.6, color: '#8B7860' }}>
+                        VIOLENCIA
+                    </Text>
+                    <Text style={{ flex: 1, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.5, color: '#3B2E20' }}>
+                        Sin sangre ni imágenes gráficas: las bajas son una cifra que baja.
+                    </Text>
+                </Box>
+                <Box style={{ flexDirection: 'row', gap: 16, paddingTop: 16, paddingBottom: 16, borderTop: '1px solid #D6C7AE' }}>
+                    <Text style={{ width: 150, fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 1.6, color: '#8B7860' }}>
+                        CONTENIDO
+                    </Text>
+                    <Text style={{ flex: 1, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.5, color: '#3B2E20' }}>
+                        Sin lenguaje soez, sin apuestas y sin compras dentro del juego.
+                    </Text>
+                </Box>
+                <Box style={{ flexDirection: 'row', gap: 16, paddingTop: 16, paddingBottom: 16, borderTop: '1px solid #D6C7AE' }}>
+                    <Text style={{ width: 150, fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 1.6, color: '#8B7860' }}>
+                        DATOS
+                    </Text>
+                    <Text style={{ flex: 1, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.5, color: '#3B2E20' }}>
+                        Sin cuentas ni servidores: el progreso vive en el navegador del jugador.
+                    </Text>
+                </Box>
+            </Box>
+        </Box>
+
+        <Box style={{ width: 1, background: '#D6C7AE' }} />
+
+        <Box style={{ width: 560, flexDirection: 'column' }}>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.4, color: '#8B7860' }}>
+                MURO DE HONOR
+            </Text>
+
+            <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: 18, paddingBottom: 14, borderBottom: '1px solid #D6C7AE' }}>
+                <Text style={{ fontFamily: "Georgia, serif", fontSize: 21, fontWeight: 'bold', color: '#201709' }}>
+                    Phaser 4.2
+                </Text>
+                <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, color: '#8B7860' }}>
+                    MIT · motor de juego
+                </Text>
+            </Box>
+            <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: 18, paddingBottom: 14, borderBottom: '1px solid #D6C7AE' }}>
+                <Text style={{ fontFamily: "Georgia, serif", fontSize: 21, fontWeight: 'bold', color: '#201709' }}>
+                    Vite 8
+                </Text>
+                <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, color: '#8B7860' }}>
+                    MIT · empaquetado
+                </Text>
+            </Box>
+            <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: 18, paddingBottom: 14, borderBottom: '1px solid #D6C7AE' }}>
+                <Text style={{ fontFamily: "Georgia, serif", fontSize: 21, fontWeight: 'bold', color: '#201709' }}>
+                    Texturas procedurales
+                </Text>
+                <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, color: '#8B7860' }}>
+                    Propias · 0 assets
+                </Text>
+            </Box>
+            <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: 18, paddingBottom: 14, borderBottom: '1px solid #D6C7AE' }}>
+                <Text style={{ fontFamily: "Georgia, serif", fontSize: 21, fontWeight: 'bold', color: '#201709' }}>
+                    Tipografías del sistema
+                </Text>
+                <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, color: '#8B7860' }}>
+                    Sin descargas · 0 kB
+                </Text>
+            </Box>
+
+            <Box style={{ flex: 1 }} />
+
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860' }}>
+                Cada sprite del juego se dibuja en tiempo de ejecución: no hay una sola imagen
+                externa en el repositorio.
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 670, left: 60, width: 1160, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            Crowd Conquest: Gate Rush · Taller T.05
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            09
+        </Text>
+    </Box>
+</Slide>

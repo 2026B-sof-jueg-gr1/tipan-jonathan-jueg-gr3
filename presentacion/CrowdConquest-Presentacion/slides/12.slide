@@ -1,0 +1,63 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#17100A', flexDirection: 'column' }}>
+    <Box style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 1280,
+        height: 720,
+        background: 'radial-gradient(ellipse 60% 65% at 78% 50%, rgba(120,44,28,0.28) 0%, rgba(23,16,10,0) 72%)',
+    }} />
+
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#C4694C' }}>
+        CIERRE
+    </Text>
+
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 54,
+        fontWeight: 'bold',
+        color: '#F3E8D6',
+        lineHeight: 1.18,
+        marginTop: 30,
+        width: 780,
+    }}>
+        El rey resta.<br />Tú multiplicas.
+    </Text>
+
+    <Box style={{ width: 120, height: 2, background: '#A6402A', marginTop: 36 }} />
+
+    <Box style={{ flexDirection: 'column', marginTop: 30 }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.6, color: '#DACAB4' }}>
+            Jugar: 2026b-sof-jueg-gr1.github.io/tipan-jonathan-jueg-gr3/count-masters/
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.6, color: '#DACAB4', marginTop: 10 }}>
+            Código: github.com/2026B-sof-jueg-gr1/tipan-jonathan-jueg-gr3
+        </Text>
+    </Box>
+
+    <Box style={{ flex: 1 }} />
+
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860' }}>
+        Jonathan Tipan · Escuela Politécnica Nacional · Taller T.05 · 2026-B
+    </Text>
+
+    <Box style={{ position: 'absolute', top: 168, left: 952, width: 210, flexDirection: 'column' }}>
+        <QRCode
+            text='https://2026b-sof-jueg-gr1.github.io/tipan-jonathan-jueg-gr3/count-masters/'
+            width={190}
+            darkColor='#17100A'
+            lightColor='#F3E8D6'
+            errorCorrectionLevel='Q'
+        />
+        <Text style={{
+            fontFamily: "'Segoe UI', sans-serif",
+            fontSize: 15,
+            lineHeight: 1.45,
+            color: '#8B7860',
+            marginTop: 14,
+            textAlign: 'center',
+        }}>
+            Escanéalo y juega en el móvil
+        </Text>
+    </Box>
+</Slide>

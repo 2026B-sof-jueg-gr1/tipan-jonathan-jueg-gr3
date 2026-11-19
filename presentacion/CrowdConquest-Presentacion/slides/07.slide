@@ -1,0 +1,51 @@
+<Slide style={{ padding: 0, position: 'relative', background: '#17100A' }}>
+    <Box style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 1280,
+        height: 720,
+        background: 'radial-gradient(ellipse 60% 55% at 82% 50%, rgba(58,34,20,0.85) 0%, rgba(23,16,10,0) 70%)',
+    }} />
+
+    <Box style={{ position: 'absolute', top: 214, left: 760, width: 466 }}>
+        <Text style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontSize: 200,
+            fontWeight: 'bold',
+            color: '#33200F',
+            lineHeight: 0.86,
+            textAlign: 'right',
+        }}>
+            02
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 232, left: 736, width: 5, height: 216, background: '#A6402A' }} />
+
+    <Box style={{ position: 'absolute', top: 226, left: 60, width: 640, flexDirection: 'column' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#C4694C' }}>
+            CAPÍTULO 02
+        </Text>
+        <Text style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontSize: 56,
+            fontWeight: 'bold',
+            color: '#F3E8D6',
+            lineHeight: 1.15,
+            marginTop: 16,
+        }}>
+            La campaña y la fábrica
+        </Text>
+        <Text style={{
+            fontFamily: "'Segoe UI', sans-serif",
+            fontSize: 20,
+            lineHeight: 1.55,
+            color: '#A79680',
+            marginTop: 22,
+        }}>
+            Tres reinos que se suman con su propio color, y un tubo que publica solo cada vez que
+            empujas el código.
+        </Text>
+    </Box>
+</Slide>

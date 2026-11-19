@@ -1,0 +1,104 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#F6EFE3', flexDirection: 'column' }}>
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#A6402A' }}>
+        LA FÁBRICA AUTOMÁTICA
+    </Text>
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 36,
+        fontWeight: 'bold',
+        color: '#201709',
+        lineHeight: 1.2,
+        marginTop: 8,
+    }}>
+        Nadie publica a mano
+    </Text>
+    <Box style={{ height: 1, background: '#D6C7AE', marginTop: 16, marginBottom: 30 }} />
+
+    <Box style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+        <Box style={{ width: 248, flexDirection: 'column', borderTop: '2px solid #A6402A', paddingTop: 14 }}>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 13, letterSpacing: 2, color: '#8B7860' }}>
+                01
+            </Text>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 21, fontWeight: 'bold', color: '#201709', marginTop: 6 }}>
+                Empujas el código
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860', marginTop: 6 }}>
+                Un commit a la rama principal.
+            </Text>
+        </Box>
+
+        <Box style={{ width: 40, alignItems: 'center', paddingTop: 32 }}>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 20, color: '#A6402A' }}>→</Text>
+        </Box>
+
+        <Box style={{ width: 248, flexDirection: 'column', borderTop: '2px solid #A6402A', paddingTop: 14 }}>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 13, letterSpacing: 2, color: '#8B7860' }}>
+                02
+            </Text>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 21, fontWeight: 'bold', color: '#201709', marginTop: 6 }}>
+                Se prueban
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860', marginTop: 6 }}>
+                59 pruebas de la lógica de combate y progreso.
+            </Text>
+        </Box>
+
+        <Box style={{ width: 40, alignItems: 'center', paddingTop: 32 }}>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 20, color: '#A6402A' }}>→</Text>
+        </Box>
+
+        <Box style={{ width: 248, flexDirection: 'column', borderTop: '2px solid #A6402A', paddingTop: 14 }}>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 13, letterSpacing: 2, color: '#8B7860' }}>
+                03
+            </Text>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 21, fontWeight: 'bold', color: '#201709', marginTop: 6 }}>
+                Se compila
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860', marginTop: 6 }}>
+                Vite produce el sitio en poco más de un segundo.
+            </Text>
+        </Box>
+
+        <Box style={{ width: 40, alignItems: 'center', paddingTop: 32 }}>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 20, color: '#A6402A' }}>→</Text>
+        </Box>
+
+        <Box style={{ width: 248, flexDirection: 'column', borderTop: '2px solid #A6402A', paddingTop: 14 }}>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 13, letterSpacing: 2, color: '#8B7860' }}>
+                04
+            </Text>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 21, fontWeight: 'bold', color: '#201709', marginTop: 6 }}>
+                Se publica
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860', marginTop: 6 }}>
+                GitHub Pages y itch.io, en paralelo.
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ marginTop: 26, paddingTop: 18, borderTop: '1px solid #D6C7AE', flexDirection: 'row', gap: 48 }}>
+        <Text style={{ width: 190, fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 1.8, color: '#8B7860' }}>
+            SI FALLA ALGO
+        </Text>
+        <Text style={{ flex: 1, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.5, color: '#3B2E20' }}>
+            La publicación se detiene antes de tocar el sitio. Un rojo en las pruebas nunca llega a
+            producción.
+        </Text>
+    </Box>
+
+    <Box style={{ flex: 1 }} />
+
+    <Image
+        src='assets/game_band.png'
+        style={{ width: 1160, height: 240, objectFit: 'cover', border: '1px solid #D6C7AE' }}
+    />
+
+    <Box style={{ position: 'absolute', top: 670, left: 60, width: 1160, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            Crowd Conquest: Gate Rush · Taller T.05
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            11
+        </Text>
+    </Box>
+</Slide>

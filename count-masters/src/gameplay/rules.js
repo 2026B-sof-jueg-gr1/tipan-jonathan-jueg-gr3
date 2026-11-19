@@ -6,7 +6,7 @@
  * recompensas y progresión con `node:test`, sin levantar el motor.
  */
 
-import { GAME_CONFIG } from '../config/gameConfig.js';
+import { COHORT_IDS, GAME_CONFIG } from '../config/gameConfig.js';
 import { UPGRADES, getUpgrade, upgradeCost } from '../data/upgrades.js';
 
 export const MAX_POPULATION = GAME_CONFIG.maxPopulation;
@@ -63,14 +63,18 @@ export function describeGate(gate) {
   }
 }
 
-/** Etiqueta textual del tipo de operación (accesibilidad: no depender del color). */
+/**
+ * Etiqueta textual del tipo de operación (accesibilidad: no depender del color).
+ * El nombre describe el efecto en la multitud, no la operación abstracta: el
+ * jugador entiende "Refuerzos" sin haber estudiado álgebra.
+ */
 export function gateOperationLabel(gate) {
   if (!gate || typeof gate !== 'object') return 'DESCONOCIDA';
   switch (gate.op) {
     case GATE_OPS.ADD:
-      return 'SUMA';
+      return 'REFUERZOS';
     case GATE_OPS.SUB:
-      return 'RESTA';
+      return 'BAJAS';
     case GATE_OPS.MUL:
       return 'MULTIPLICA';
     default:
@@ -221,7 +225,18 @@ export function createDefaultProgress() {
     totalRuns: 0,
     totalWins: 0,
     lastReward: null,
+    conqueredKingdoms: [],
   };
+}
+
+/**
+ * Reinos que ya marchan con el jugador. Se devuelve siempre una lista limpia:
+ * solo identificadores de cohorte conocidos.
+ */
+export function getConqueredKingdoms(progress) {
+  const list = progress?.conqueredKingdoms;
+  if (!Array.isArray(list)) return [];
+  return [...new Set(list.filter((id) => typeof id === 'string' && COHORT_IDS.includes(id)))];
 }
 
 function toSafeInt(value, fallback = 0) {
@@ -264,6 +279,11 @@ export function sanitizeProgress(raw, { levelCount = 3, catalog = UPGRADES } = {
 
   progress.totalRuns = Math.max(0, toSafeInt(raw.totalRuns, 0));
   progress.totalWins = Math.max(0, toSafeInt(raw.totalWins, 0));
+
+  const conquered = Array.isArray(raw.conqueredKingdoms) ? raw.conqueredKingdoms : [];
+  progress.conqueredKingdoms = [
+    ...new Set(conquered.filter((id) => typeof id === 'string' && COHORT_IDS.includes(id))),
+  ];
 
   if (raw.bestResults && typeof raw.bestResults === 'object') {
     for (const [key, value] of Object.entries(raw.bestResults)) {
@@ -368,7 +388,7 @@ export function applyUpgradePurchase(progress, upgradeId, catalog = UPGRADES) {
  */
 export function applyLevelReward(
   progress,
-  { levelId, coinsEarned = 0, survivors = 0, runId = null, levelCount = 3 } = {},
+  { levelId, coinsEarned = 0, survivors = 0, runId = null, levelCount = 3, conquers = null } = {},
 ) {
   const base = progress ?? createDefaultProgress();
   const id = Number(levelId);
@@ -398,11 +418,22 @@ export function applyLevelReward(
     },
   };
 
+  // El reino vencido se suma a la campaña. Es idempotente: repetir la victoria
+  // no duplica la cohorte ni desordena el mosaico.
+  const previousKingdoms = getConqueredKingdoms(base);
+  const conqueredKingdoms =
+    typeof conquers === 'string' &&
+    COHORT_IDS.includes(conquers) &&
+    !previousKingdoms.includes(conquers)
+      ? [...previousKingdoms, conquers]
+      : previousKingdoms;
+
   const next = {
     ...base,
     coins: Math.min(MAX_COINS, Math.max(0, toSafeInt(base.coins, 0)) + reward),
     completedLevels,
     bestResults,
+    conqueredKingdoms,
     highestUnlockedLevel: Math.min(
       safeLevelCount,
       Math.max(base.highestUnlockedLevel ?? 1, id + 1),

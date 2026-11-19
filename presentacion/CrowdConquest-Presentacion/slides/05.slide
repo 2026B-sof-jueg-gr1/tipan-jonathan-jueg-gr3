@@ -1,0 +1,103 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#F6EFE3', flexDirection: 'column' }}>
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#A6402A' }}>
+        EL ALMA · LAS TRES OPERACIONES
+    </Text>
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 36,
+        fontWeight: 'bold',
+        color: '#201709',
+        lineHeight: 1.2,
+        marginTop: 8,
+    }}>
+        Tres puertas, tres destinos para tu ejército
+    </Text>
+    <Box style={{ height: 1, background: '#D6C7AE', marginTop: 16, marginBottom: 32 }} />
+
+    <Box style={{ flexDirection: 'row', gap: 32, height: 330 }}>
+        <Box style={{
+            width: 498,
+            flexDirection: 'column',
+            padding: 28,
+            border: '2px solid #A6402A',
+            background: '#F1E5D2',
+        }}>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 56, fontWeight: 'bold', color: '#A6402A', lineHeight: 1 }}>
+                ×2
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.4, color: '#7C2B1B', marginTop: 14 }}>
+                MULTIPLICA
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.55, color: '#3B2E20', marginTop: 14 }}>
+                Duplica el ejército en un solo paso. Aparece poco, y siempre justo antes de una
+                decisión que no perdona.
+            </Text>
+            <Box style={{ flex: 1 }} />
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#7C2B1B' }}>
+                La única puerta que el rey no puede abrir.
+            </Text>
+        </Box>
+
+        <Box style={{
+            width: 299,
+            flexDirection: 'column',
+            padding: 26,
+            border: '1px solid #D6C7AE',
+        }}>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 52, fontWeight: 'bold', color: '#2E7266', lineHeight: 1 }}>
+                +40
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.4, color: '#8B7860', marginTop: 14 }}>
+                REFUERZOS
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.55, color: '#3B2E20', marginTop: 14 }}>
+                Suma fija. La puerta más frecuente: decide si llegas con ejército o con recuerdo.
+            </Text>
+            <Box style={{ flex: 1 }} />
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860' }}>
+                Tres de cada siete puertas.
+            </Text>
+        </Box>
+
+        <Box style={{
+            width: 299,
+            flexDirection: 'column',
+            padding: 26,
+            border: '1px solid #D6C7AE',
+        }}>
+            <Text style={{ fontFamily: "Georgia, serif", fontSize: 52, fontWeight: 'bold', color: '#8B7860', lineHeight: 1 }}>
+                −5
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.4, color: '#8B7860', marginTop: 14 }}>
+                BAJAS
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.55, color: '#3B2E20', marginTop: 14 }}>
+                Resta efectivos. La pista es de un solo carril y el rey controla lo que entra por
+                ella.
+            </Text>
+            <Box style={{ flex: 1 }} />
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860' }}>
+                Se puede sobrevivir; no se puede ignorar.
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ marginTop: 34, paddingTop: 22, borderTop: '1px solid #D6C7AE', flexDirection: 'row', gap: 48 }}>
+        <Text style={{ width: 190, fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 1.8, color: '#8B7860' }}>
+            LA REGLA
+        </Text>
+        <Text style={{ flex: 1, fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.55, color: '#3B2E20' }}>
+            El nivel decide qué puertas aparecen y en qué orden. El jugador solo decide por cuál
+            pasar, y esa decisión se paga en la siguiente. No hay otra habilidad en el juego.
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 670, left: 60, width: 1160, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            Crowd Conquest: Gate Rush · Taller T.05
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            05
+        </Text>
+    </Box>
+</Slide>

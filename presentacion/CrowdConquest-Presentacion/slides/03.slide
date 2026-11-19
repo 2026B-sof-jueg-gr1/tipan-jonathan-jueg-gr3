@@ -1,0 +1,132 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#F6EFE3', flexDirection: 'column' }}>
+    <Text style={{
+        fontFamily: "'Segoe UI', sans-serif",
+        fontSize: 14,
+        letterSpacing: 2.6,
+        color: '#A6402A',
+    }}>
+        EL ALMA · LA PREMISA
+    </Text>
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 36,
+        fontWeight: 'bold',
+        color: '#201709',
+        lineHeight: 1.2,
+        marginTop: 8,
+    }}>
+        Un rey que solo sabe restar
+    </Text>
+    <Box style={{ height: 1, background: '#D6C7AE', marginTop: 16, marginBottom: 34 }} />
+
+    <Box style={{ flexDirection: 'row', gap: 60, flex: 1 }}>
+        <Box style={{ width: 620, flexDirection: 'column' }}>
+            <Text style={{
+                fontFamily: "'Segoe UI', sans-serif",
+                fontSize: 14,
+                letterSpacing: 2.4,
+                color: '#8B7860',
+            }}>
+                LOGLINE
+            </Text>
+            <Text style={{
+                fontFamily: "Georgia, 'Times New Roman', serif",
+                fontSize: 27,
+                lineHeight: 1.52,
+                color: '#201709',
+                marginTop: 16,
+            }}>
+                En un reino donde cada persona es una cifra, un rey que solo sabe restar borra a su
+                pueblo para engordar su ejército. Tú no tienes trono ni armas: tienes{' '}
+                <span style={{ color: '#A6402A', fontWeight: 'bold' }}>
+                    la única operación que él prohibió
+                </span>
+                . Recluta, multiplica y llega a la ciudadela antes de que te convierta en cero.
+            </Text>
+        </Box>
+
+        <Box style={{ width: 480, flexDirection: 'column' }}>
+            <Box style={{ flexDirection: 'column' }}>
+                <Text style={{
+                    fontFamily: "'Segoe UI', sans-serif",
+                    fontSize: 14,
+                    letterSpacing: 1.8,
+                    color: '#8B7860',
+                }}>
+                    CADA PERSONA ES UNA CIFRA
+                </Text>
+                <Text style={{
+                    fontFamily: "'Segoe UI', sans-serif",
+                    fontSize: 18,
+                    lineHeight: 1.55,
+                    color: '#3B2E20',
+                    marginTop: 8,
+                }}>
+                    No hay unidades abstractas: 240 soldados son 240 sprites en pantalla, no un
+                    número en una barra.
+                </Text>
+            </Box>
+
+            <Box style={{
+                flexDirection: 'column',
+                marginTop: 22,
+                paddingTop: 22,
+                borderTop: '1px solid #D6C7AE',
+            }}>
+                <Text style={{
+                    fontFamily: "'Segoe UI', sans-serif",
+                    fontSize: 14,
+                    letterSpacing: 1.8,
+                    color: '#8B7860',
+                }}>
+                    EL REY SOLO RESTA
+                </Text>
+                <Text style={{
+                    fontFamily: "'Segoe UI', sans-serif",
+                    fontSize: 18,
+                    lineHeight: 1.55,
+                    color: '#3B2E20',
+                    marginTop: 8,
+                }}>
+                    Su ejército nunca crece. El tuyo tampoco, si no lo alimentas: cada puerta que
+                    dejas pasar es una resta que no elegiste.
+                </Text>
+            </Box>
+
+            <Box style={{
+                flexDirection: 'column',
+                marginTop: 22,
+                paddingTop: 22,
+                borderTop: '1px solid #D6C7AE',
+            }}>
+                <Text style={{
+                    fontFamily: "'Segoe UI', sans-serif",
+                    fontSize: 14,
+                    letterSpacing: 1.8,
+                    color: '#8B7860',
+                }}>
+                    TÚ MULTIPLICAS
+                </Text>
+                <Text style={{
+                    fontFamily: "'Segoe UI', sans-serif",
+                    fontSize: 18,
+                    lineHeight: 1.55,
+                    color: '#3B2E20',
+                    marginTop: 8,
+                }}>
+                    La operación prohibida es la única razón por la que todavía estás en pie cuando
+                    aparece la ciudadela.
+                </Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 670, left: 60, width: 1160, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            Crowd Conquest: Gate Rush · Taller T.05
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            03
+        </Text>
+    </Box>
+</Slide>

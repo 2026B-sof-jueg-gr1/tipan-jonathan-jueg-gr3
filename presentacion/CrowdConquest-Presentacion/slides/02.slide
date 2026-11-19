@@ -1,0 +1,54 @@
+<Slide style={{ padding: 0, position: 'relative', background: '#17100A' }}>
+    <Box style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 1280,
+        height: 720,
+        background: 'radial-gradient(ellipse 60% 55% at 18% 50%, rgba(58,34,20,0.85) 0%, rgba(23,16,10,0) 70%)',
+    }} />
+
+    <Box style={{ position: 'absolute', top: 214, left: 54, width: 470 }}>
+        <Text style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontSize: 200,
+            fontWeight: 'bold',
+            color: '#33200F',
+            lineHeight: 0.86,
+        }}>
+            01
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 232, left: 486, width: 5, height: 216, background: '#A6402A' }} />
+
+    <Box style={{ position: 'absolute', top: 226, left: 526, width: 640, flexDirection: 'column' }}>
+        <Text style={{
+            fontFamily: "'Segoe UI', sans-serif",
+            fontSize: 14,
+            letterSpacing: 2.6,
+            color: '#C4694C',
+        }}>
+            CAPÍTULO 01
+        </Text>
+        <Text style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontSize: 56,
+            fontWeight: 'bold',
+            color: '#F3E8D6',
+            lineHeight: 1.15,
+            marginTop: 16,
+        }}>
+            El alma
+        </Text>
+        <Text style={{
+            fontFamily: "'Segoe UI', sans-serif",
+            fontSize: 20,
+            lineHeight: 1.55,
+            color: '#A79680',
+            marginTop: 22,
+        }}>
+            Por qué un juego de sumas necesita, para tener sentido, un rey que solo reste.
+        </Text>
+    </Box>
+</Slide>

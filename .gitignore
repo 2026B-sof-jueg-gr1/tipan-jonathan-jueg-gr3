@@ -1,0 +1,16 @@
+# Metadatos del entorno de trabajo (capturas, memoria, borradores)
+.workbuddy-ai/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencias y artefactos de compilación
+node_modules/
+dist/
+*.log
+
+# Caché interna de la herramienta de diapositivas
+.cache/
+.slidep/

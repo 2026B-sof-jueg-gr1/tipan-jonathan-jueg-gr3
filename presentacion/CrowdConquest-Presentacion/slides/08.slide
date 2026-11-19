@@ -1,0 +1,84 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#F6EFE3', flexDirection: 'column' }}>
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#A6402A' }}>
+        LA CAMPAÑA · LAS COHORTES
+    </Text>
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 36,
+        fontWeight: 'bold',
+        color: '#201709',
+        lineHeight: 1.2,
+        marginTop: 8,
+    }}>
+        El rey vencido conserva su trono
+    </Text>
+    <Box style={{ height: 1, background: '#D6C7AE', marginTop: 16, marginBottom: 32 }} />
+
+    <Box style={{ flexDirection: 'row', gap: 44, flex: 1 }}>
+        <Image
+            src='assets/game_portrait.png'
+            style={{ width: 240, height: 426, objectFit: 'cover', border: '1px solid #D6C7AE' }}
+        />
+
+        <Box style={{ width: 876, flexDirection: 'column' }}>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.62, color: '#3B2E20' }}>
+                Al ganar un nivel no borras al enemigo: lo incorporas. El rey conserva su trono —el
+                modelo que Alejandro aplicó a Poros— y su gente marcha contigo con su propia
+                vestimenta. Por eso el ejército termina siendo un mosaico y no una masa uniforme.
+            </Text>
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.62, color: '#3B2E20', marginTop: 20 }}>
+                No es decoración: el color dice de dónde vienes y cuánto has crecido. El HUD lo
+                confirma con una etiqueta que no existía al empezar la partida.
+            </Text>
+
+            <Box style={{ flex: 1 }} />
+
+            <Box style={{ flexDirection: 'row', gap: 28, paddingTop: 22, borderTop: '1px solid #D6C7AE' }}>
+                <Box style={{ width: 272, flexDirection: 'row', gap: 14, alignItems: 'flex-start' }}>
+                    <Box style={{ width: 16, height: 16, background: '#2E7266', marginTop: 4 }} />
+                    <Box style={{ flexDirection: 'column' }}>
+                        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 17, fontWeight: 'bold', color: '#201709' }}>
+                            Tu pueblo
+                        </Text>
+                        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.45, color: '#8B7860', marginTop: 4 }}>
+                            Casco metálico y lanza
+                        </Text>
+                    </Box>
+                </Box>
+
+                <Box style={{ width: 272, flexDirection: 'row', gap: 14, alignItems: 'flex-start' }}>
+                    <Box style={{ width: 16, height: 16, background: '#C08A2E', marginTop: 4 }} />
+                    <Box style={{ flexDirection: 'column' }}>
+                        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 17, fontWeight: 'bold', color: '#201709' }}>
+                            Clan de la colina
+                        </Text>
+                        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.45, color: '#8B7860', marginTop: 4 }}>
+                            Sin casco, hacha y capa
+                        </Text>
+                    </Box>
+                </Box>
+
+                <Box style={{ width: 272, flexDirection: 'row', gap: 14, alignItems: 'flex-start' }}>
+                    <Box style={{ width: 16, height: 16, background: '#3F5E9E', marginTop: 4 }} />
+                    <Box style={{ flexDirection: 'column' }}>
+                        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 17, fontWeight: 'bold', color: '#201709' }}>
+                            Vanguardia
+                        </Text>
+                        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.45, color: '#8B7860', marginTop: 4 }}>
+                            Cresta, escudo y lanza
+                        </Text>
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 670, left: 60, width: 1160, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            Crowd Conquest: Gate Rush · Taller T.05
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            08
+        </Text>
+    </Box>
+</Slide>

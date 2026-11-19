@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crowd Conquest: Gate Rush — Un ejército hecho de cifras</title>
+    <meta
+      name="description"
+      content="Runner 2D de guerra antigua donde tu ejército es un número. Recluta, multiplica y conquista la ciudadela del rey que solo sabe restar. Proyecto académico construido con Phaser 4 y Vite."
+    />
+    <meta name="theme-color" content="#0a0806" />
+    <link rel="icon" href="./count-masters/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:title" content="Crowd Conquest: Gate Rush" />
+    <meta
+      property="og:description"
+      content="En un reino donde cada persona es una cifra, un rey que solo sabe restar borra a su pueblo. Tú tienes la única operación que él prohibió."
+    />
+    <meta property="og:type" content="website" />
+
+    <style>
+      :root {
+        --bg: #0a0806;
+        --bg-2: #120d09;
+        --bg-3: #1a120c;
+        --bronze: #c98a3c;
+        --gold: #f2c879;
+        --terra: #b4552f;
+        --teal: #35e0d0;
+        --bone: #efe4d2;
+        --muted: #a2937e;
+        --line: rgba(201, 138, 60, 0.24);
+        --serif: Georgia, "Times New Roman", "Iowan Old Style", serif;
+        --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--bone);
+        font-family: var(--sans);
+        font-size: 17px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      /* Textura de polvo y penumbra, sin imágenes externas. */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background:
+          radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201, 138, 60, 0.16), transparent 70%),
+          radial-gradient(ellipse 60% 50% at 85% 75%, rgba(180, 85, 47, 0.1), transparent 72%),
+          radial-gradient(ellipse 80% 50% at 50% 110%, rgba(0, 0, 0, 0.9), transparent 70%);
+      }
+
+      .wrap {
+        position: relative;
+        z-index: 1;
+        width: min(1080px, calc(100% - 48px));
+        margin: 0 auto;
+      }
+
+      /* ------------------------------------------------------------- nav */
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(14px);
+        background: rgba(10, 8, 6, 0.82);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 14px 0;
+      }
+
+      .brand {
+        font-family: var(--serif);
+        font-size: 15px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold);
+        white-space: nowrap;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 26px;
+        font-size: 13px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.18s;
+      }
+
+      .nav-links a:hover {
+        color: var(--gold);
+      }
+
+      @media (max-width: 720px) {
+        .nav-links {
+          display: none;
+        }
+      }
+
+      /* ------------------------------------------------------------ hero */
+      .hero {
+        position: relative;
+        min-height: 92vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 70px 0 90px;
+      }
+
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--bronze);
+        margin-bottom: 26px;
+      }
+
+      h1 {
+        font-family: var(--serif);
+        font-weight: 400;
+        line-height: 0.94;
+        margin: 0 0 10px;
+        font-size: clamp(46px, 9vw, 104px);
+        letter-spacing: -0.02em;
+      }
+
+      h1 .thin {
+        display: block;
+        color: var(--muted);
+        font-size: 0.42em;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        margin-top: 18px;
+      }
+
+      .logline {
+        font-family: var(--serif);
+        font-size: clamp(18px, 2.3vw, 24px);
+        line-height: 1.55;
+        color: var(--bone);
+        max-width: 660px;
+        margin: 34px 0 0;
+        padding-left: 22px;
+        border-left: 2px solid var(--bronze);
+      }
+
+      .logline em {
+        color: var(--gold);
+        font-style: italic;
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px;
+        margin-top: 44px;
+      }
+
+      .btn-play {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        padding: 22px 46px;
+        font-family: var(--serif);
+        font-size: 22px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #1a0f05;
+        background: linear-gradient(180deg, var(--gold), var(--bronze));
+        border-radius: 4px;
+        border: 1px solid rgba(255, 235, 190, 0.6);
+        box-shadow:
+          0 0 0 1px rgba(0, 0, 0, 0.4),
+          0 18px 50px rgba(201, 138, 60, 0.28);
+        transition:
+          transform 0.16s ease,
+          box-shadow 0.16s ease;
+      }
+
+      .btn-play:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          0 0 0 1px rgba(0, 0, 0, 0.4),
+          0 24px 60px rgba(201, 138, 60, 0.42);
+      }
+
+      .btn-play .arrow {
+        font-size: 16px;
+        opacity: 0.75;
+      }
+
+      .btn-ghost {
+        font-size: 13px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+        text-decoration: none;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 3px;
+        transition: color 0.18s;
+      }
+
+      .btn-ghost:hover {
+        color: var(--gold);
+      }
+
+      .hero-meta {
+        margin-top: 58px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 34px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .hero-meta span strong {
+        color: var(--bone);
+        font-weight: 500;
+      }
+
+      /* Formación de cohortes: el mosaico del juego como elemento gráfico. */
+      .hero-art {
+        position: absolute;
+        right: -20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: min(33vw, 420px);
+        pointer-events: none;
+        opacity: 0.85;
+        -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 26%, transparent 76%);
+        mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 26%, transparent 76%);
+      }
+
+      @media (max-width: 1100px) {
+        .hero-art {
+          display: none;
+        }
+      }
+
+      /* --------------------------------------------------------- sections */
+      section {
+        padding: 96px 0;
+        border-top: 1px solid var(--line);
+        position: relative;
+      }
+
+      .sec-label {
+        font-size: 12px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--bronze);
+        margin-bottom: 18px;
+      }
+
+      h2 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(30px, 4.4vw, 46px);
+        line-height: 1.15;
+        margin: 0 0 22px;
+        letter-spacing: -0.01em;
+      }
+
+      .lead {
+        font-size: 19px;
+        color: var(--muted);
+        max-width: 720px;
+        margin: 0 0 46px;
+      }
+
+      .lead strong {
+        color: var(--bone);
+        font-weight: 500;
+      }
+
+      /* ------------------------------------------------ las tres puertas */
+      .ops {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+      }
+
+      .op {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 30px 26px;
+        background: linear-gradient(180deg, rgba(26, 18, 12, 0.9), rgba(10, 8, 6, 0.6));
+      }
+
+      .op .glyph {
+        font-family: var(--serif);
+        font-size: 40px;
+        line-height: 1;
+        margin-bottom: 14px;
+      }
+
+      .op h3 {
+        font-family: var(--serif);
+        font-size: 21px;
+        font-weight: 400;
+        margin: 0 0 8px;
+      }
+
+      .op p {
+        margin: 0;
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .op.add .glyph { color: var(--teal); }
+      .op.sub .glyph { color: #ff6b5b; }
+      .op.mul .glyph { color: var(--gold); }
+
+      .op.add { border-color: rgba(53, 224, 208, 0.28); }
+      .op.sub { border-color: rgba(255, 107, 91, 0.28); }
+      .op.mul { border-color: rgba(242, 200, 121, 0.3); }
+
+      /* ------------------------------------------------------- el umbral */
+      .threshold {
+        margin-top: 26px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 34px;
+        background: rgba(18, 13, 9, 0.75);
+      }
+
+      .threshold h3 {
+        font-family: var(--serif);
+        font-size: 22px;
+        font-weight: 400;
+        margin: 0 0 14px;
+        color: var(--gold);
+      }
+
+      .threshold p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      .threshold p:last-child {
+        margin-bottom: 0;
+      }
+
+      .threshold code {
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-size: 15px;
+        color: var(--gold);
+        background: rgba(242, 200, 121, 0.1);
+        padding: 2px 8px;
+        border-radius: 3px;
+      }
+
+      /* --------------------------------------------------- mapa campaña */
+      .campaign {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 56px;
+        align-items: center;
+      }
+
+      @media (max-width: 860px) {
+        .campaign {
+          grid-template-columns: 1fr;
+          gap: 36px;
+        }
+      }
+
+      .map-frame {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 18px;
+        background:
+          radial-gradient(ellipse 80% 60% at 50% 10%, rgba(201, 138, 60, 0.1), transparent 70%),
+          rgba(12, 9, 6, 0.9);
+      }
+
+      .realm {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(201, 138, 60, 0.12);
+      }
+
+      .realm:last-child {
+        border-bottom: 0;
+      }
+
+      .realm-dot {
+        flex: 0 0 auto;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-top: 7px;
+        border: 2px solid var(--muted);
+        background: transparent;
+        transition: all 0.3s;
+      }
+
+      .realm.is-conquered .realm-dot {
+        border-color: var(--gold);
+        background: var(--gold);
+        box-shadow: 0 0 16px rgba(242, 200, 121, 0.6);
+      }
+
+      .realm-name {
+        font-family: var(--serif);
+        font-size: 19px;
+        margin: 0 0 3px;
+      }
+
+      .realm-desc {
+        margin: 0;
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .realm-state {
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .realm.is-conquered .realm-state {
+        color: var(--gold);
+      }
+
+      .campaign-status {
+        margin-top: 22px;
+        padding: 14px 18px;
+        border: 1px dashed var(--line);
+        border-radius: 5px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .campaign-status strong {
+        color: var(--gold);
+        font-weight: 500;
+      }
+
+      /* ------------------------------------------------------- features */
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      .feature {
+        background: var(--bg-2);
+        padding: 28px 26px;
+      }
+
+      .feature h3 {
+        font-family: var(--serif);
+        font-size: 18px;
+        font-weight: 400;
+        margin: 0 0 8px;
+      }
+
+      .feature p {
+        margin: 0;
+        font-size: 14.5px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      /* ---------------------------------------------------------- legal */
+      .legal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 28px;
+        background: rgba(18, 13, 9, 0.7);
+      }
+
+      .card h3 {
+        font-family: var(--serif);
+        font-size: 20px;
+        font-weight: 400;
+        margin: 0 0 12px;
+      }
+
+      .card p {
+        margin: 0 0 12px;
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .rating-badge {
+        font-family: var(--serif);
+        font-size: 26px;
+        line-height: 1;
+        padding: 10px 16px;
+        border: 2px solid var(--bone);
+        border-radius: 4px;
+        color: var(--bone);
+      }
+
+      .rating-text {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .honor-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .honor-list li {
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(201, 138, 60, 0.12);
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .honor-list li:last-child {
+        border-bottom: 0;
+      }
+
+      .honor-list strong {
+        color: var(--bone);
+        font-weight: 500;
+      }
+
+      .honor-list a {
+        color: var(--bronze);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(201, 138, 60, 0.35);
+      }
+
+      /* --------------------------------------------------------- footer */
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 54px 0 70px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .footer-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: center;
+      }
+
+      footer a {
+        color: var(--bronze);
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        color: var(--gold);
+      }
+
+      .final-cta {
+        text-align: center;
+        padding: 96px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .final-cta h2 {
+        margin-bottom: 12px;
+      }
+
+      .final-cta p {
+        color: var(--muted);
+        margin: 0 0 40px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="nav">
+      <div class="wrap nav-inner">
+        <div class="brand">Crowd Conquest</div>
+        <div class="nav-links">
+          <a href="#alma">El alma</a>
+          <a href="#mecanica">La mecánica</a>
+          <a href="#campana">La campaña</a>
+          <a href="#legal">Legal</a>
+          <a href="#honor">Créditos</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ------------------------------------------------------------- HERO -->
+    <header class="hero">
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 320 420" width="100%">
+          <defs>
+            <pattern id="coh-own" width="26" height="30" patternUnits="userSpaceOnUse">
+              <rect x="7" y="7" width="12" height="18" rx="4" fill="#35e0d0" />
+            </pattern>
+            <pattern id="coh-hill" width="26" height="30" patternUnits="userSpaceOnUse">
+              <rect x="7" y="7" width="12" height="18" rx="4" fill="#f0a63c" />
+            </pattern>
+            <pattern id="coh-vanguard" width="26" height="30" patternUnits="userSpaceOnUse">
+              <rect x="7" y="7" width="12" height="18" rx="4" fill="#5b8cf5" />
+            </pattern>
+          </defs>
+          <rect width="320" height="132" fill="url(#coh-own)" />
+          <rect y="132" width="320" height="110" fill="url(#coh-hill)" />
+          <rect y="242" width="320" height="178" fill="url(#coh-vanguard)" />
+        </svg>
+      </div>
+
+      <div class="wrap">
+        <div class="eyebrow">Gate Rush · Proyecto académico</div>
+
+        <h1>
+          Crowd Conquest
+          <span class="thin">Gate Rush</span>
+        </h1>
+
+        <p class="logline">
+          En un reino donde cada persona es una cifra, un rey que solo sabe restar borra a su
+          pueblo para engordar su ejército. Tú no tienes trono ni armas:
+          <em>tienes la única operación que él prohibió.</em> Recluta, multiplica y llega a la
+          ciudadela antes de que te convierta en cero.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn-play" href="./count-masters/">
+            Jugar ahora <span class="arrow">▸</span>
+          </a>
+          <a
+            class="btn-ghost"
+            href="https://github.com/2026B-sof-jueg-gr1/tipan-jonathan-jueg-gr3"
+            target="_blank"
+            rel="noopener"
+            >Ver el código</a
+          >
+        </div>
+
+        <div class="hero-meta">
+          <span><strong>3</strong> desfiladeros</span>
+          <span><strong>3</strong> pueblos aliados</span>
+          <span><strong>0</strong> assets externos</span>
+          <span>Phaser 4 · Vite · JavaScript</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- -------------------------------------------------------- EL ALMA -->
+    <section id="alma">
+      <div class="wrap">
+        <div class="sec-label">I · El alma del juego</div>
+        <h2>¿Cómo hacemos que aprender sea divertido y no un castigo?</h2>
+
+        <p class="lead">
+          No poniendo ejercicios al final del nivel. <strong>Quitando los ejercicios por
+          completo.</strong> Aquí nadie resuelve una operación para desbloquear una puerta: la
+          operación <em>es</em> la puerta, y la consecuencia se ve en el acto, como una multitud
+          que crece o desaparece delante de ti.
+        </p>
+
+        <p class="lead">
+          La mecánica y la historia dicen exactamente la misma frase:
+          <strong>sumar te hace grande, multiplicar te hace imparable, restar te borra.</strong>
+          El villano no es malvado por decreto: es el que solo sabe quitar. Y por eso el pueblo se
+          te une a ti y no a él.
+        </p>
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------- MECÁNICA -->
+    <section id="mecanica">
+      <div class="wrap">
+        <div class="sec-label">II · Resonancia ludonarrativa</div>
+        <h2>Tres puertas, una sola decisión</h2>
+
+        <p class="lead">
+          Cada línea de puertas te obliga a elegir en menos de dos segundos. Nunca eliges una
+          operación abstracta: eliges <strong>cuánta gente quieres tener cuando llegue la
+          batalla</strong>.
+        </p>
+
+        <div class="ops">
+          <div class="op add">
+            <div class="glyph">+</div>
+            <h3>Refuerzos</h3>
+            <p>El pueblo se te une. Creces de forma constante y predecible: siempre el mismo número.</p>
+          </div>
+          <div class="op sub">
+            <div class="glyph">−</div>
+            <h3>Bajas</h3>
+            <p>El diezmo del rey. Te cobra en personas, no en monedas. Es su única arma.</p>
+          </div>
+          <div class="op mul">
+            <div class="glyph">×</div>
+            <h3>Multiplica</h3>
+            <p>La proclama: cada soldado jura traer a otro. Crece según lo que ya eres.</p>
+          </div>
+        </div>
+
+        <div class="threshold">
+          <h3>El umbral: la lección está en el número 150</h3>
+          <p>
+            En la última puerta de la ciudadela, el juego te enfrenta a
+            <code>+150</code> contra <code>×2</code>. El punto de cruce es exactamente
+            <strong>150</strong>: por debajo de esa cifra conviene sumar, por encima conviene
+            multiplicar.
+          </p>
+          <p>
+            Eso es el razonamiento proporcional completo —comparar un crecimiento aditivo con uno
+            multiplicativo— comprimido en una decisión de dos segundos. No hay enunciado, no hay
+            nota, no hay castigo: hay una apuesta, y el resultado lo ves corriendo.
+          </p>
+          <p>
+            El juego no enseña procedimientos. Entrena una intuición, que es lo que de verdad
+            perdura.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------- LA CAMPAÑA -->
+    <section id="campana">
+      <div class="wrap">
+        <div class="sec-label">III · La campaña</div>
+        <h2>No conquistas reinos: los confederas</h2>
+
+        <p class="lead">
+          Cuando vences a un reino, su rey no muere: entrega su estandarte y conserva su trono.
+          Su pueblo marcha contigo, con su propia vestimenta y su propio color. Al final, tu
+          multitud es un mosaico de todos los que liberaste.
+        </p>
+
+        <div class="campaign">
+          <div class="map-frame">
+            <svg viewBox="0 0 300 400" width="100%" role="img" aria-label="Mapa de la campaña">
+              <defs>
+                <linearGradient id="road" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stop-color="#2b3554" />
+                  <stop offset="100%" stop-color="#4a3a22" />
+                </linearGradient>
+              </defs>
+
+              <path
+                d="M150 372 C 92 330, 210 300, 150 258 C 96 218, 206 176, 150 132 C 112 100, 150 76, 150 40"
+                fill="none"
+                stroke="url(#road)"
+                stroke-width="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M150 372 C 92 330, 210 300, 150 258 C 96 218, 206 176, 150 132 C 112 100, 150 76, 150 40"
+                fill="none"
+                stroke="#c98a3c"
+                stroke-width="1"
+                stroke-dasharray="4 7"
+                opacity="0.55"
+              />
+
+              <g id="node-1">
+                <circle cx="150" cy="340" r="15" fill="#120d09" stroke="#35e0d0" stroke-width="2" />
+                <circle cx="150" cy="340" r="6" fill="#35e0d0" />
+              </g>
+              <g id="node-2">
+                <circle cx="150" cy="228" r="15" fill="#120d09" stroke="#f0a63c" stroke-width="2" />
+                <circle cx="150" cy="228" r="6" fill="#f0a63c" />
+              </g>
+              <g id="node-3">
+                <circle cx="150" cy="66" r="15" fill="#120d09" stroke="#b04cff" stroke-width="2" />
+                <circle cx="150" cy="66" r="6" fill="#b04cff" />
+              </g>
+
+              <text x="176" y="345" fill="#a2937e" font-size="12" font-family="system-ui, sans-serif">El paso bajo</text>
+              <text x="176" y="233" fill="#a2937e" font-size="12" font-family="system-ui, sans-serif">Las dos hoces</text>
+              <text x="176" y="71" fill="#a2937e" font-size="12" font-family="system-ui, sans-serif">La ciudadela</text>
+
+              <text x="150" y="392" fill="#5f5449" font-size="10" font-family="system-ui, sans-serif" text-anchor="middle" letter-spacing="2">EL AVANCE</text>
+            </svg>
+          </div>
+
+          <div>
+            <div class="realm" data-kingdom="hill">
+              <div class="realm-dot"></div>
+              <div>
+                <p class="realm-name">El clan de la colina</p>
+                <p class="realm-desc">
+                  Guerreros sin casco, con hacha y capa corta. Se unen tras la primera victoria.
+                </p>
+                <p class="realm-state">Pendiente</p>
+              </div>
+            </div>
+
+            <div class="realm" data-kingdom="vanguard">
+              <div class="realm-dot"></div>
+              <div>
+                <p class="realm-name">La Vanguardia</p>
+                <p class="realm-desc">
+                  Infantería con cresta y escudo redondo. La élite que custodiaba el segundo paso.
+                </p>
+                <p class="realm-state">Pendiente</p>
+              </div>
+            </div>
+
+            <div class="realm" data-kingdom="king">
+              <div class="realm-dot"></div>
+              <div>
+                <p class="realm-name">La ciudadela del rey</p>
+                <p class="realm-desc">
+                  400 integrantes que el rey arrancó a su propio pueblo. No se une: se rinde.
+                </p>
+                <p class="realm-state">Pendiente</p>
+              </div>
+            </div>
+
+            <div class="campaign-status" id="campaign-status">
+              <strong>Tu campaña:</strong> 0 de 3 reinos. Juega para ver cómo avanza el mapa.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- CARACTERÍSTICAS -->
+    <section>
+      <div class="wrap">
+        <div class="sec-label">IV · Lo que encontrarás</div>
+        <h2>Un runner, no un simulador</h2>
+
+        <div class="features">
+          <div class="feature">
+            <h3>Control lateral puro</h3>
+            <p>Arrastra, toca o usa las flechas. La velocidad no se negocia: solo el carril.</p>
+          </div>
+          <div class="feature">
+            <h3>Tres clases de obstáculo</h3>
+            <p>Sierra oscilante, barrera con hueco practicable y bloque de impacto.</p>
+          </div>
+          <div class="feature">
+            <h3>Combate determinista</h3>
+            <p>Gana quien tenga más gente, sin azar. La cifra que ves es la cifra que decide.</p>
+          </div>
+          <div class="feature">
+            <h3>Mosaico de cohortes</h3>
+            <p>Cada reino conquistado aporta su color y su silueta a tu multitud.</p>
+          </div>
+          <div class="feature">
+            <h3>Progreso persistente</h3>
+            <p>Monedas, mejoras y reinos conquistados se guardan en tu navegador.</p>
+          </div>
+          <div class="feature">
+            <h3>Arte 100 % procedural</h3>
+            <p>Ni una imagen, ni un audio. Todo se dibuja y se sintetiza por código.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------ LEGAL -->
+    <section id="legal">
+      <div class="wrap">
+        <div class="sec-label">V · Las reglas del mundo real</div>
+        <h2>Marco legal, con estilo</h2>
+
+        <div class="legal-grid">
+          <div class="card">
+            <div class="rating">
+              <div class="rating-badge">PEGI 3</div>
+              <div class="rating-text">Apto para todos<br />ESRB · E</div>
+            </div>
+            <h3>Clasificación</h3>
+            <p>
+              Contiene violencia mínima dirigida exclusivamente a cifras abstractas. Ningún píxel
+              fue dañado durante la producción de este juego.
+            </p>
+            <p>
+              No hay sangre, no hay muerte representada y no hay interacción entre jugadores.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Propiedad intelectual</h3>
+            <p>
+              Proyecto original e independiente. <strong>No está afiliado a Count Masters ni a sus
+              autores.</strong> No se reutiliza ninguna marca, nombre comercial, ilustración ni
+              audio de terceros.
+            </p>
+            <p>
+              La inspiración histórica proviene de fuentes antiguas de dominio público (Heródoto,
+              Arriano, Plutarco), no de obras audiovisuales contemporáneas.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Privacidad</h3>
+            <p>
+              El juego no recoge datos personales, no usa cookies de seguimiento y no envía nada a
+              ningún servidor.
+            </p>
+            <p>
+              Todo el progreso se guarda en <code>localStorage</code>, en tu propio navegador, y
+              desaparece si borras los datos del sitio.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- MURO DE HONOR -->
+    <section id="honor">
+      <div class="wrap">
+        <div class="sec-label">VI · Muro de honor</div>
+        <h2>Cero assets externos</h2>
+
+        <p class="lead">
+          La mayoría de proyectos acredita aquí paquetes de arte y sonido con licencia CC0.
+          Este no puede: <strong>no usa ninguno.</strong> Cada textura, cada personaje y cada tono
+          se genera por código en tiempo de ejecución.
+        </p>
+
+        <ul class="honor-list">
+          <li>
+            <strong>Phaser 4.2.1</strong> — motor de juego, licencia MIT.
+            <a href="https://phaser.io" target="_blank" rel="noopener">phaser.io</a>
+          </li>
+          <li>
+            <strong>Vite 8</strong> — empaquetado y servidor de desarrollo, licencia MIT.
+            <a href="https://vite.dev" target="_blank" rel="noopener">vite.dev</a>
+          </li>
+          <li>
+            <strong>Web Audio API</strong> — todos los sonidos son tonos sintetizados en el
+            navegador; no se distribuye ningún archivo de audio.
+          </li>
+          <li>
+            <strong>Texturas procedurales</strong> — los 30×46 píxeles de cada soldado se dibujan
+            con <code>Graphics.generateTexture()</code>. Cero archivos de imagen.
+          </li>
+          <li>
+            <strong>Tipografías del sistema</strong> — Trebuchet MS, Segoe UI y Georgia; ninguna
+            fuente se descarga desde la red.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------- CTA FINAL -->
+    <div class="final-cta">
+      <div class="wrap">
+        <h2>El rey solo sabe restar</h2>
+        <p>Tú decides si sumas o multiplicas.</p>
+        <a class="btn-play" href="./count-masters/"> Jugar ahora <span class="arrow">▸</span> </a>
+      </div>
+    </div>
+
+    <footer>
+      <div class="wrap footer-row">
+        <div>
+          Crowd Conquest: Gate Rush · Jonathan Tipan · Escuela Politécnica Nacional
+        </div>
+        <div>
+          <a href="https://github.com/2026B-sof-jueg-gr1/tipan-jonathan-jueg-gr3" target="_blank" rel="noopener">Repositorio</a>
+          &nbsp;·&nbsp;
+          <a href="./count-masters/">Jugar</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // El mapa de campaña lee el progreso real que guarda el juego.
+      // Mismo origen, misma clave: la landing y el juego comparten memoria.
+      (function () {
+        var KEY = 'crowd-conquest.progress.v1';
+        var progress = null;
+
+        try {
+          progress = JSON.parse(localStorage.getItem(KEY) || 'null');
+        } catch (error) {
+          progress = null;
+        }
+
+        var conquered = (progress && Array.isArray(progress.conqueredKingdoms))
+          ? progress.conqueredKingdoms
+          : [];
+
+        var completed = (progress && Array.isArray(progress.completedLevels))
+          ? progress.completedLevels
+          : [];
+
+        var total = 3;
+        var done = conquered.length + (completed.indexOf(3) >= 0 ? 1 : 0);
+
+        function mark(kingdom, isDone) {
+          var node = document.querySelector('[data-kingdom="' + kingdom + '"]');
+          if (!node) return;
+          if (!isDone) return;
+          node.classList.add('is-conquered');
+          var state = node.querySelector('.realm-state');
+          if (state) state.textContent = 'Conquistado';
+        }
+
+        mark('hill', conquered.indexOf('hill') >= 0);
+        mark('vanguard', conquered.indexOf('vanguard') >= 0);
+        mark('king', completed.indexOf(3) >= 0);
+
+        var status = document.getElementById('campaign-status');
+        if (status && done > 0) {
+          status.innerHTML =
+            '<strong>Tu campaña:</strong> ' + done + ' de ' + total + ' reinos.';
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -6,7 +6,7 @@
  * externos: el proyecto funciona sin red y sin problemas de CORS.
  */
 
-import { COLORS } from '../config/gameConfig.js';
+import { COLORS, COHORTS } from '../config/gameConfig.js';
 
 /** Crea un Graphics temporal, lo rasteriza y lo destruye. */
 function bake(scene, key, width, height, draw) {
@@ -19,8 +19,28 @@ function bake(scene, key, width, height, draw) {
   g.destroy();
 }
 
-/** Cuerpo común de los personajes (cabeza, torso, brazos y piernas). */
-function drawCharacter(g, { body, dark, light, skin, headband, scale = 1 }) {
+/**
+ * Cuerpo común de los personajes (cabeza, torso, brazos y piernas).
+ *
+ * El equipo (`gear`) define la SILUETA, que es lo que de verdad se distingue a
+ * 30×46 px: casco, arma, escudo y capa. El color solo refuerza la lectura y
+ * nunca es la única señal (accesibilidad para daltonismo).
+ */
+function drawCharacter(
+  g,
+  {
+    body,
+    dark,
+    light,
+    skin,
+    headband,
+    scale = 1,
+    helmet = 'cap',
+    weapon = 'spear',
+    shield = false,
+    cape = null,
+  },
+) {
   const s = (value) => value * scale;
   const width = s(30);
   const height = s(46);
@@ -29,6 +49,14 @@ function drawCharacter(g, { body, dark, light, skin, headband, scale = 1 }) {
   // Sombra en los pies (aporta sensación de profundidad sin sprites extra).
   g.fillStyle(0x000000, 0.26);
   g.fillEllipse(cx, height - s(2), s(20), s(7));
+
+  // Capa: se dibuja primero para que quede detrás del cuerpo.
+  if (cape !== null) {
+    g.fillStyle(cape, 1);
+    g.fillTriangle(cx - s(9), s(19), cx + s(9), s(19), cx, s(43));
+    g.fillStyle(cape, 0.55);
+    g.fillTriangle(cx - s(4.5), s(19), cx + s(4.5), s(19), cx, s(39));
+  }
 
   // Piernas.
   g.fillStyle(dark, 1);
@@ -49,31 +77,79 @@ function drawCharacter(g, { body, dark, light, skin, headband, scale = 1 }) {
   g.fillCircle(cx - s(8), s(20), s(2.4));
   g.fillCircle(cx + s(8), s(20), s(2.4));
 
+  // Escudo redondo: la señal de silueta más potente a este tamaño.
+  if (shield) {
+    g.fillStyle(dark, 1);
+    g.fillCircle(cx - s(8.6), s(27), s(6.4));
+    g.fillStyle(light, 1);
+    g.fillCircle(cx - s(8.6), s(27), s(5));
+    g.fillStyle(dark, 1);
+    g.fillCircle(cx - s(8.6), s(27), s(1.9));
+  }
+
   // Cabeza.
   g.fillStyle(skin, 1);
   g.fillCircle(cx, s(11), s(7.4));
 
+  // Casco (o pelo descubierto, que también es una silueta reconocible).
+  if (helmet === 'none') {
+    g.fillStyle(0x3a2a20, 1);
+    g.fillRoundedRect(cx - s(7.4), s(3.2), s(14.8), s(4.8), s(2));
+  } else {
+    g.fillStyle(0x93a0ba, 1);
+    g.fillCircle(cx, s(9), s(7.4));
+    g.fillStyle(0x5f6b85, 1);
+    g.fillRect(cx - s(8.4), s(7.4), s(16.8), s(2.4));
+    if (helmet === 'crest') {
+      g.fillStyle(light, 1);
+      g.fillRect(cx - s(1.8), 0, s(3.6), s(7));
+    }
+  }
+
   // Cinta del equipo (identifica el bando sin depender solo del color del torso).
   g.fillStyle(headband, 1);
-  g.fillRect(cx - s(7.2), s(7.4), s(14.4), s(4));
+  g.fillRect(cx - s(7.2), s(7.6), s(14.4), s(3.6));
 
   // Ojos.
   g.fillStyle(0x1a1a26, 0.85);
-  g.fillCircle(cx - s(2.6), s(12.4), s(1.1));
-  g.fillCircle(cx + s(2.6), s(12.4), s(1.1));
+  g.fillCircle(cx - s(2.6), s(12.8), s(1.1));
+  g.fillCircle(cx + s(2.6), s(12.8), s(1.1));
+
+  // Arma.
+  if (weapon === 'spear') {
+    g.fillStyle(0x6b4a2f, 1);
+    g.fillRect(cx + s(9.2), s(6), s(2.2), s(31));
+    g.fillStyle(0xd9e2f5, 1);
+    g.fillTriangle(cx + s(8.2), s(7), cx + s(12.4), s(7), cx + s(10.3), 0);
+  } else if (weapon === 'axe') {
+    g.fillStyle(0x6b4a2f, 1);
+    g.fillRect(cx + s(9.4), s(11), s(2.2), s(24));
+    g.fillStyle(0xc9d3e6, 1);
+    g.fillTriangle(cx + s(7.4), s(13), cx + s(13.4), s(9.5), cx + s(13.4), s(20));
+  }
+}
+
+/** Hornea una cohorte aliada a partir de su definición en `COHORTS`. */
+function bakeCohort(scene, cohort) {
+  bake(scene, cohort.texture, 30, 46, (g) => {
+    drawCharacter(g, {
+      body: cohort.body,
+      dark: cohort.dark,
+      light: cohort.light,
+      skin: COLORS.skin,
+      headband: cohort.headband,
+      helmet: cohort.helmet,
+      weapon: cohort.weapon,
+      shield: cohort.shield,
+      cape: cohort.cape,
+    });
+  });
 }
 
 export function createGameTextures(scene) {
-  // ------------------------------------------------------------ aliados
-  bake(scene, 'ally', 30, 46, (g) => {
-    drawCharacter(g, {
-      body: COLORS.ally,
-      dark: COLORS.allyDark,
-      light: COLORS.allyLight,
-      skin: COLORS.skin,
-      headband: 0x0d5f66,
-    });
-  });
+  // ------------------------------------------------- cohortes aliadas
+  // Una textura por pueblo: el color y la silueta salen de `COHORTS`.
+  for (const cohort of Object.values(COHORTS)) bakeCohort(scene, cohort);
 
   // ------------------------------------------------------------ enemigos
   bake(scene, 'enemy', 30, 46, (g) => {
@@ -83,6 +159,8 @@ export function createGameTextures(scene) {
       light: COLORS.enemyLight,
       skin: COLORS.skin,
       headband: 0x7a1c16,
+      helmet: 'none',
+      weapon: 'spear',
     });
   });
 
@@ -95,6 +173,8 @@ export function createGameTextures(scene) {
       skin: 0xe8c9ae,
       headband: 0x2c0a4d,
       scale: 1.13,
+      helmet: 'crest',
+      weapon: 'spear',
     });
     // Peto de armadura.
     g.fillStyle(0x2c0a4d, 1);
@@ -120,6 +200,8 @@ export function createGameTextures(scene) {
       skin: 0xffe0c2,
       headband: 0x2c0a4d,
       scale: 1.3,
+      helmet: 'none',
+      weapon: 'spear',
     });
 
     // Corona de tres puntas sobre la cabeza.

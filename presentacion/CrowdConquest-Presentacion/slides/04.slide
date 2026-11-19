@@ -1,0 +1,92 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#F6EFE3', flexDirection: 'column' }}>
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#A6402A' }}>
+        EL ALMA · RESONANCIA LUDONARRATIVA
+    </Text>
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 36,
+        fontWeight: 'bold',
+        color: '#201709',
+        lineHeight: 1.2,
+        marginTop: 8,
+    }}>
+        La mecánica y la historia dicen lo mismo
+    </Text>
+    <Box style={{ height: 1, background: '#D6C7AE', marginTop: 16, marginBottom: 30 }} />
+
+    <Box style={{ flexDirection: 'row', gap: 26, paddingBottom: 10 }}>
+        <Box style={{ width: 84 }} />
+        <Text style={{ width: 286, fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 1.8, color: '#8B7860' }}>
+            LO QUE HACES
+        </Text>
+        <Text style={{ width: 404, fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 1.8, color: '#8B7860' }}>
+            LO QUE SIGNIFICA
+        </Text>
+        <Text style={{ width: 300, fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 1.8, color: '#8B7860' }}>
+            LO QUE SE SIENTE
+        </Text>
+    </Box>
+    <Box style={{ height: 1, background: '#D6C7AE' }} />
+
+    <Box style={{ flexDirection: 'row', gap: 26, paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #D6C7AE' }}>
+        <Text style={{ width: 84, fontFamily: "Georgia, serif", fontSize: 44, fontWeight: 'bold', color: '#2E7266', lineHeight: 1 }}>
+            +
+        </Text>
+        <Text style={{ width: 286, fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 'bold', color: '#201709', lineHeight: 1.3 }}>
+            Sumas refuerzos
+        </Text>
+        <Text style={{ width: 404, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.55, color: '#3B2E20' }}>
+            Reclutas pueblos enteros. Cada aliado conserva su color y su rey en el trono.
+        </Text>
+        <Text style={{ width: 300, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.55, color: '#3B2E20' }}>
+            Crecer se siente como una obligación moral, no como una mejora.
+        </Text>
+    </Box>
+
+    <Box style={{ flexDirection: 'row', gap: 26, paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #D6C7AE' }}>
+        <Text style={{ width: 84, fontFamily: "Georgia, serif", fontSize: 44, fontWeight: 'bold', color: '#8B7860', lineHeight: 1 }}>
+            −
+        </Text>
+        <Text style={{ width: 286, fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 'bold', color: '#201709', lineHeight: 1.3 }}>
+            Restas bajas
+        </Text>
+        <Text style={{ width: 404, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.55, color: '#3B2E20' }}>
+            El rey te desgasta en cada puerta. No puedes evitarlo, solo administrarlo.
+        </Text>
+        <Text style={{ width: 300, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.55, color: '#3B2E20' }}>
+            Perder se siente como una derrota, no como un error de cálculo.
+        </Text>
+    </Box>
+
+    <Box style={{ flexDirection: 'row', gap: 26, paddingTop: 20, paddingBottom: 20 }}>
+        <Text style={{ width: 84, fontFamily: "Georgia, serif", fontSize: 44, fontWeight: 'bold', color: '#A6402A', lineHeight: 1 }}>
+            ×
+        </Text>
+        <Text style={{ width: 286, fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 'bold', color: '#A6402A', lineHeight: 1.3 }}>
+            Multiplicas
+        </Text>
+        <Text style={{ width: 404, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.55, color: '#3B2E20' }}>
+            Duplicas el ejército con la operación que el rey prohibió por miedo.
+        </Text>
+        <Text style={{ width: 300, fontFamily: "'Segoe UI', sans-serif", fontSize: 17, lineHeight: 1.55, color: '#3B2E20' }}>
+            Ganar se siente como una transgresión, no como una recompensa.
+        </Text>
+    </Box>
+
+    <Box style={{ flex: 1 }} />
+
+    <Box style={{ background: '#A6402A', paddingTop: 15, paddingBottom: 15, paddingLeft: 22, paddingRight: 22 }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.5, color: '#FBEFE0' }}>
+            La tecla que el jugador pulsa es la misma que el villano teme. No es una metáfora: es la misma operación.
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 670, left: 60, width: 1160, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            Crowd Conquest: Gate Rush · Taller T.05
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#8B7860' }}>
+            04
+        </Text>
+    </Box>
+</Slide>

@@ -30,8 +30,10 @@ export const GAME_CONFIG = Object.freeze({
   startY: 4300,
   finishY: 450,
 
-  // Población.
-  maxPopulation: 99999,
+  // Población. El techo se fija en 5 000 para que las cifras se mantengan en el
+  // orden de magnitud de un ejército antiguo real: un número creíble de personas
+  // en vez de una cifra abstracta imposible de representar.
+  maxPopulation: 5000,
   maxRenderedAllies: 100,
   maxRenderedEnemies: 80,
 
@@ -66,15 +68,17 @@ export const CAMERA_SCROLL_X = GAME_CONFIG.worldCenterX - GAME_CONFIG.width / 2;
  * `maxRenderedAllies` / `maxRenderedEnemies` personajes.
  */
 export const CROWD_CONFIG = Object.freeze({
-  maxPopulation: 99999,
+  maxPopulation: 5000,
   maxRenderedAllies: 100,
   maxRenderedEnemies: 80,
 
   horizontalSpacing: 20,
-  verticalSpacing: 22,
-  maxColumns: 10,
+  verticalSpacing: 25,
+  maxColumns: 12,
 
-  minVisibleScale: 0.55,
+  // La escala mínima se mantiene alta a propósito: una multitud grande debe
+  // ocupar más pista, no encogerse hasta parecer un detalle del escenario.
+  minVisibleScale: 0.8,
   maxVisibleScale: 1.0,
 });
 
@@ -123,6 +127,67 @@ export const COLORS = Object.freeze({
   overlay: 0x05070f,
   gold: 0xffd166,
 });
+
+/**
+ * Cohortes aliadas.
+ *
+ * Cada pueblo que se suma a la campaña aporta una silueta y un color de
+ * estandarte propios. El color NUNCA cambia el comportamiento: solo indica a
+ * qué pueblo pertenece cada integrante. La cifra del HUD sigue siendo la única
+ * fuente de verdad sobre el tamaño de la multitud.
+ *
+ * `own` es el pueblo del jugador; los demás se desbloquean al conquistar.
+ */
+export const COHORTS = Object.freeze({
+  own: {
+    id: 'own',
+    name: 'Tu pueblo',
+    texture: 'ally',
+    body: 0x35e0d0,
+    dark: 0x0f8f92,
+    light: 0xa8fff5,
+    headband: 0x0d5f66,
+    helmet: 'cap',
+    weapon: 'spear',
+    shield: false,
+    cape: null,
+  },
+  hill: {
+    id: 'hill',
+    name: 'Clan de la colina',
+    texture: 'ally_hill',
+    body: 0xf0a63c,
+    dark: 0x9a5f14,
+    light: 0xffd79a,
+    headband: 0x6b3f08,
+    helmet: 'none',
+    weapon: 'axe',
+    shield: false,
+    cape: 0x7a4a12,
+  },
+  vanguard: {
+    id: 'vanguard',
+    name: 'Vanguardia',
+    texture: 'ally_vanguard',
+    body: 0x5b8cf5,
+    dark: 0x2b4a9e,
+    light: 0xb9ccff,
+    headband: 0x1c2f6b,
+    helmet: 'crest',
+    weapon: 'spear',
+    shield: true,
+    cape: null,
+  },
+});
+
+/** Orden estable de cohortes: sirve para comparar y para el saneado del progreso. */
+export const COHORT_IDS = Object.freeze(Object.keys(COHORTS).filter((id) => id !== 'own'));
+
+/**
+ * Peso visual de cada cohorte dentro de la formación. El pueblo propio ocupa
+ * siempre la vanguardia; los aliados se reparten la retaguardia.
+ */
+export const COHORT_WEIGHTS = Object.freeze({ own: 3, hill: 2, vanguard: 2 });
 
 /** Capas de renderizado. Todo lo que comparte capa se dibuja por orden de creación. */
 export const DEPTHS = Object.freeze({

@@ -1,0 +1,74 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#17100A', flexDirection: 'column' }}>
+    <Box style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 1280,
+        height: 720,
+        background: 'radial-gradient(ellipse 55% 60% at 24% 62%, rgba(120,44,28,0.35) 0%, rgba(23,16,10,0) 72%)',
+    }} />
+
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#C4694C' }}>
+        LA MECÁNICA · EL UMBRAL
+    </Text>
+
+    <Box style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 16, marginTop: 54 }}>
+        <Text style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontSize: 176,
+            fontWeight: 'bold',
+            color: '#F3E8D6',
+            lineHeight: 0.9,
+        }}>
+            150
+        </Text>
+        <Text style={{
+            fontFamily: "'Segoe UI', sans-serif",
+            fontSize: 18,
+            letterSpacing: 1.4,
+            color: '#A79680',
+            paddingBottom: 20,
+        }}>
+            efectivos
+        </Text>
+    </Box>
+
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 26,
+        lineHeight: 1.4,
+        color: '#C4694C',
+        marginTop: 34,
+        width: 560,
+    }}>
+        La lección del juego está en ese número.
+    </Text>
+
+    <Box style={{ position: 'absolute', top: 196, left: 690, width: 530, flexDirection: 'column' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.62, color: '#DACAB4' }}>
+            Por debajo de 150 el ejército se extingue antes de la ciudadela: llegas, pero llegas sin
+            nadie.
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.62, color: '#DACAB4', marginTop: 22 }}>
+            Por encima, multiplicar deja de ser una decisión y se vuelve una tentación: el jugador
+            deja de leer las puertas y empieza a atravesarlas.
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 18, lineHeight: 1.62, color: '#DACAB4', marginTop: 22 }}>
+            El nivel está calibrado para que solo una secuencia correcta cruce el umbral. No hay
+            margen para el azar.
+        </Text>
+        <Box style={{ height: 1, background: '#3A2A1C', marginTop: 28 }} />
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.5, color: '#8B7860', marginTop: 16 }}>
+            Umbral medido sobre el nivel 3, con 238 efectivos en el HUD.
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 670, left: 60, width: 1160, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#7A6A56' }}>
+            Crowd Conquest: Gate Rush · Taller T.05
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#7A6A56' }}>
+            06
+        </Text>
+    </Box>
+</Slide>

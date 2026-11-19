@@ -19,16 +19,17 @@
 export const LEVELS = [
   {
     id: 1,
-    name: 'Primer avance',
+    name: 'El paso bajo',
     subtitle: 'Aprende a elegir',
     description:
-      'Puertas sencillas, un obstáculo fijo y una barrera con hueco. Ideal para dominar el control lateral.',
+      'El primer desfiladero. Puertas sencillas, un obstáculo fijo y una barrera con hueco. Domina el control lateral y gana tu primer aliado.',
     startPopulation: 1,
     forwardSpeed: 145,
     startY: 4300,
     finishY: 450,
     reward: 40,
     hasCastle: false,
+    conquers: 'hill',
     theme: { curb: 0x2ee6a8, accent: 0x2ee6a8 },
 
     gates: [
@@ -75,7 +76,7 @@ export const LEVELS = [
     enemies: [
       {
         id: 'l1-e1',
-        name: 'Rivales de la colina',
+        name: 'Clan de la colina',
         y: 1150,
         triggerY: 1350,
         population: 35,
@@ -86,16 +87,17 @@ export const LEVELS = [
 
   {
     id: 2,
-    name: 'Doble sierra',
+    name: 'Las dos hoces',
     subtitle: 'Ritmo y anticipación',
     description:
-      'Sierras en movimiento, barrera con hueco y dos enfrentamientos. Necesitarás posicionarte antes de cada línea.',
+      'Dos desfiladeros encadenados. Sierras en movimiento, barrera con hueco y dos enfrentamientos: tendrás que colocarte antes de cada línea.',
     startPopulation: 5,
     forwardSpeed: 158,
     startY: 4300,
     finishY: 450,
     reward: 70,
     hasCastle: false,
+    conquers: 'vanguard',
     theme: { curb: 0x5b7cfa, accent: 0x5b7cfa },
 
     gates: [
@@ -168,7 +170,7 @@ export const LEVELS = [
       },
       {
         id: 'l2-e2',
-        name: 'Vanguardia enemiga',
+        name: 'La Vanguardia',
         y: 700,
         triggerY: 900,
         population: 90,
@@ -179,16 +181,17 @@ export const LEVELS = [
 
   {
     id: 3,
-    name: 'La conquista',
-    subtitle: 'El rey del castillo',
+    name: 'La ciudadela',
+    subtitle: 'El rey que resta',
     description:
-      'Recorrido largo, obstáculos severos y un ejército real de 400 integrantes custodiando el castillo.',
+      'Recorrido largo, obstáculos severos y un ejército real de 400 integrantes. El rey que solo sabe restar te espera en la ciudadela.',
     startPopulation: 10,
     forwardSpeed: 165,
     startY: 4300,
     finishY: 450,
     reward: 120,
     hasCastle: true,
+    conquers: null,
     theme: { curb: 0xb04cff, accent: 0xffc93c },
 
     gates: [

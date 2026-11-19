@@ -15,6 +15,8 @@ import Phaser from 'phaser';
 import {
   CAMERA_SCROLL_X,
   COLORS,
+  COHORTS,
+  COHORT_WEIGHTS,
   CROWD_CONFIG,
   DEPTHS,
   GAME_CONFIG,
@@ -26,6 +28,7 @@ import {
   calculateRewards,
   computeHazardLoss,
   getCoinBonusLevel,
+  getConqueredKingdoms,
   getStartingCrowdBonus,
   resolveBattle,
 } from '../gameplay/rules.js';
@@ -118,6 +121,7 @@ export default class GameScene extends Phaser.Scene {
       x: this.playerX,
       y: this.playerY,
       population: startPopulation,
+      composition: this.buildComposition(),
     });
     this.displayPopulation = this.crowd.population;
 
@@ -136,6 +140,26 @@ export default class GameScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.handleShutdown, this);
 
     this.startCountdown();
+  }
+
+  /**
+   * Composición del mosaico.
+   *
+   * El pueblo propio ocupa la vanguardia y cada reino conquistado aporta una
+   * cohorte en la retaguardia. El color no altera ninguna regla: solo indica de
+   * quién es cada integrante. La cifra del HUD sigue siendo la única verdad.
+   */
+  buildComposition() {
+    const conquered = getConqueredKingdoms(this.progress);
+    const parts = [{ texture: COHORTS.own.texture, weight: COHORT_WEIGHTS.own }];
+
+    for (const id of conquered) {
+      const cohort = COHORTS[id];
+      if (!cohort) continue;
+      parts.push({ texture: cohort.texture, weight: COHORT_WEIGHTS[id] ?? 1 });
+    }
+
+    return parts;
   }
 
   // ------------------------------------------------------------- arranque
@@ -427,9 +451,10 @@ export default class GameScene extends Phaser.Scene {
         this.castleConquered = true;
         this.track.conquerCastle();
         this.cameras.main.flash(420, 255, 201, 60);
-        this.showToast('¡CASTILLO CONQUISTADO!');
+        this.showToast('¡EL REY SE RINDE!');
       } else {
-        this.showToast('¡VICTORIA!');
+        const cohort = COHORTS[this.level.conquers];
+        this.showToast(cohort ? `¡${cohort.name.toUpperCase()} SE UNE!` : '¡VICTORIA!');
       }
 
       this.pendingTimers.push(
@@ -521,6 +546,7 @@ export default class GameScene extends Phaser.Scene {
         survivors,
         runId: this.runId,
         levelCount: LEVEL_COUNT,
+        conquers: this.level.conquers ?? null,
       });
     } else {
       this.progressManager.recordDefeat();
@@ -576,6 +602,21 @@ export default class GameScene extends Phaser.Scene {
       depth,
       onClick: () => this.pauseGame(),
     });
+
+    // Coalición: cuántos pueblos marchan ya en la multitud.
+    const alliedCount = getConqueredKingdoms(this.progress).length;
+    if (alliedCount > 0) {
+      UI.chip(this, {
+        x: 380,
+        y: 46,
+        width: 236,
+        height: 42,
+        text: `${alliedCount + 1} PUEBLOS EN MARCHA`,
+        fontSize: 14,
+        align: 'center',
+        depth,
+      });
+    }
 
     // Población.
     this.add.image(54, 102, 'ally').setScale(0.8).setScrollFactor(0).setDepth(depth);

@@ -1,0 +1,65 @@
+<Slide style={{ padding: 60, position: 'relative', background: '#17100A', flexDirection: 'column' }}>
+    <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, letterSpacing: 2.6, color: '#C4694C' }}>
+        EL ESCAPARATE · LA LANDING
+    </Text>
+    <Text style={{
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: 36,
+        fontWeight: 'bold',
+        color: '#F3E8D6',
+        lineHeight: 1.2,
+        marginTop: 8,
+    }}>
+        La portada también es parte del juego
+    </Text>
+    <Box style={{ height: 1, background: '#3A2A1C', marginTop: 16, marginBottom: 32 }} />
+
+    <Box style={{ flexDirection: 'row', gap: 48, flex: 1 }}>
+        <Image
+            src='assets/landing.png'
+            style={{ width: 660, height: 412, objectFit: 'cover', border: '1px solid #3A2A1C' }}
+        />
+
+        <Box style={{ width: 452, flexDirection: 'column' }}>
+            <Box style={{ flexDirection: 'column' }}>
+                <Text style={{ fontFamily: "Georgia, serif", fontSize: 19, fontWeight: 'bold', color: '#F3E8D6', lineHeight: 1.35 }}>
+                    El logline está en la primera pantalla
+                </Text>
+                <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.55, color: '#B9A88F', marginTop: 6 }}>
+                    No hay que hacer scroll para entender de qué va el juego.
+                </Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', marginTop: 24 }}>
+                <Text style={{ fontFamily: "Georgia, serif", fontSize: 19, fontWeight: 'bold', color: '#F3E8D6', lineHeight: 1.35 }}>
+                    El botón JUGAR mide 380 px
+                </Text>
+                <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.55, color: '#B9A88F', marginTop: 6 }}>
+                    Es el segundo elemento más grande de la página, después del título.
+                </Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', marginTop: 24 }}>
+                <Text style={{ fontFamily: "Georgia, serif", fontSize: 19, fontWeight: 'bold', color: '#F3E8D6', lineHeight: 1.35 }}>
+                    La sección legal está en la misma página
+                </Text>
+                <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.55, color: '#B9A88F', marginTop: 6 }}>
+                    No en un pie diminuto que nadie lee, sino a un scroll de distancia.
+                </Text>
+            </Box>
+
+            <Box style={{ flex: 1 }} />
+
+            <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 16, lineHeight: 1.55, color: '#C4694C', paddingTop: 18, borderTop: '1px solid #3A2A1C' }}>
+                La landing y el juego son el mismo producto, no dos entregas.
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', top: 670, left: 60, width: 1160, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#7A6A56' }}>
+            Crowd Conquest: Gate Rush · Taller T.05
+        </Text>
+        <Text style={{ fontFamily: "'Segoe UI', sans-serif", fontSize: 14, color: '#7A6A56' }}>
+            10
+        </Text>
+    </Box>
+</Slide>

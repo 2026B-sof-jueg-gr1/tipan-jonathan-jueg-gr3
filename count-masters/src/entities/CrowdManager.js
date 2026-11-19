@@ -25,6 +25,7 @@ export default class CrowdManager {
       maxRendered = CROWD_CONFIG.maxRenderedAllies,
       depth = DEPTHS.crowd,
       onChange = null,
+      composition = null,
     },
   ) {
     this.scene = scene;
@@ -45,8 +46,56 @@ export default class CrowdManager {
     this.pulse = 0;
     this.bobTime = 0;
 
+    // Mosaico de cohortes: qué pueblo ocupa cada banda de filas.
+    this.cohortPlan = this.buildCohortPlan(composition);
+    this.densityFactor = 1;
+
     this.createPool();
     this.rebuildFormation();
+  }
+
+  /**
+   * Convierte `[{ texture, weight }]` en bandas acumuladas [0..1].
+   * El pueblo propio va siempre delante (primeras filas) y los aliados detrás.
+   */
+  buildCohortPlan(composition) {
+    const valid = Array.isArray(composition)
+      ? composition.filter((part) => part && part.texture && Number(part.weight) > 0)
+      : [];
+    const list = valid.length > 0 ? valid : [{ texture: this.texture, weight: 1 }];
+
+    const total = list.reduce((sum, part) => sum + Number(part.weight), 0);
+    let acc = 0;
+
+    return list.map((part) => {
+      const from = acc / total;
+      acc += Number(part.weight);
+      return { texture: part.texture, from, to: acc / total };
+    });
+  }
+
+  /** Textura que corresponde a una fila concreta de la formación. */
+  textureForRow(row, rows) {
+    if (this.cohortPlan.length === 1) return this.cohortPlan[0].texture;
+    const fraction = (row + 0.5) / Math.max(1, rows);
+    for (const band of this.cohortPlan) {
+      if (fraction >= band.from && fraction < band.to) return band.texture;
+    }
+    return this.cohortPlan[this.cohortPlan.length - 1].texture;
+  }
+
+  /**
+   * Reasigna la textura de cada sprite según su fila. Solo cambia la textura
+   * cuando de verdad hace falta, y nunca durante `update`.
+   */
+  applyCohorts() {
+    const count = this.renderedCount;
+    for (let i = 0; i < count; i += 1) {
+      const row = Math.floor(i / this.columns);
+      const key = this.textureForRow(row, this.rows);
+      const sprite = this.sprites[i];
+      if (sprite.texture.key !== key) sprite.setTexture(key);
+    }
   }
 
   createPool() {
@@ -108,6 +157,14 @@ export default class CrowdManager {
       const visible = i < count;
       this.sprites[i].setVisible(visible).setActive(visible);
     }
+
+    // Densidad honesta: cuando la población lógica supera los sprites
+    // disponibles, la formación se aprieta en lugar de crecer. La multitud se
+    // ve más compacta, no más alta, y la cifra del HUD sigue siendo creíble.
+    const overflow = Math.max(0, this.population - this.maxRendered);
+    this.densityFactor = clamp(1 - overflow / (this.maxRendered * 8), 0.88, 1);
+
+    this.applyCohorts();
   }
 
   /** Cambia la población lógica y reajusta la representación. */
@@ -152,8 +209,8 @@ export default class CrowdManager {
     if (count === 0) return;
 
     const scale = this.scaleValue;
-    const spacingX = CROWD_CONFIG.horizontalSpacing * scale;
-    const spacingY = CROWD_CONFIG.verticalSpacing * scale;
+    const spacingX = CROWD_CONFIG.horizontalSpacing * scale * this.densityFactor;
+    const spacingY = CROWD_CONFIG.verticalSpacing * scale * this.densityFactor;
     const spread = 1 + this.pulse * 0.3;
     const halfCols = (this.columns - 1) / 2;
 
