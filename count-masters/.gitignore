@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# WorkBuddy AI: notas de trabajo y capturas de verificación locales
+.workbuddy-ai/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
