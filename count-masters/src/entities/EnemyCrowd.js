@@ -11,6 +11,7 @@ import {
   COLORS,
   CROWD_CONFIG,
   DEPTHS,
+  FONT_DISPLAY,
   FONT_FAMILY,
   GAME_CONFIG,
   TRACK_CENTER,
@@ -88,31 +89,50 @@ export class EnemyCrowd {
   buildLabel() {
     const container = this.scene.add.container(this.x, this.y).setDepth(DEPTHS.effects);
 
+    const accent = this.isBoss ? COLORS.boss : COLORS.enemy;
     const bg = this.scene.add.graphics();
-    const width = this.isBoss ? 230 : 170;
-    const height = this.isBoss ? 76 : 64;
-    bg.fillStyle(0x1a0e14, 0.82);
-    bg.fillRoundedRect(-width / 2, -height / 2, width, height, 20);
-    bg.lineStyle(3, this.isBoss ? COLORS.boss : COLORS.enemy, 0.95);
-    bg.strokeRoundedRect(-width / 2, -height / 2, width, height, 20);
+    const width = this.isBoss ? 236 : 176;
+    const height = this.isBoss ? 82 : 70;
+
+    // Sombra proyectada.
+    bg.fillStyle(0x000000, 0.4);
+    bg.fillRoundedRect(-width / 2 + 4, -height / 2 + 5, width, height, 10);
+    // Cuerpo de piedra oscura.
+    bg.fillStyle(0x140d0a, 0.92);
+    bg.fillRoundedRect(-width / 2, -height / 2, width, height, 10);
+    // Luz superior.
+    bg.fillStyle(0x2a1c12, 0.6);
+    bg.fillRoundedRect(-width / 2, -height / 2, width, height * 0.45, 10);
+    // Doble filete: bronce + acento del bando.
+    bg.lineStyle(2, COLORS.bronze, 0.9);
+    bg.strokeRoundedRect(-width / 2, -height / 2, width, height, 10);
+    bg.lineStyle(1, accent, 0.55);
+    bg.strokeRoundedRect(-width / 2 + 5, -height / 2 + 5, width - 10, height - 10, 7);
+    // Tachuelas.
+    for (const rx of [-width / 2 + 10, width / 2 - 10]) {
+      for (const ry of [-height / 2 + 10, height / 2 - 10]) {
+        bg.fillStyle(COLORS.gold, 0.8);
+        bg.fillCircle(rx, ry, 2.4);
+      }
+    }
 
     const countText = this.scene.add
-      .text(0, 2, String(this.population), {
-        fontFamily: FONT_FAMILY,
-        fontSize: this.isBoss ? '44px' : '38px',
-        color: '#ffffff',
-        fontStyle: 'bold',
+      .text(0, 4, String(this.population), {
+        fontFamily: FONT_DISPLAY,
+        fontSize: this.isBoss ? '46px' : '40px',
+        color: '#f7edd8',
       })
       .setOrigin(0.5);
+    countText.setShadow(0, 2, '#000000', 5, false, true);
 
     const nameText = this.scene.add
-      .text(0, -height / 2 - 20, this.isBoss ? 'REY DEL CASTILLO' : this.name, {
+      .text(0, -height / 2 - 22, this.isBoss ? 'REY DEL CASTILLO' : this.name, {
         fontFamily: FONT_FAMILY,
-        fontSize: '17px',
-        color: this.isBoss ? '#e0b3ff' : '#ffb3aa',
-        fontStyle: 'bold',
+        fontSize: '13px',
+        color: this.isBoss ? '#e0a8b8' : '#e0a08c',
       })
       .setOrigin(0.5);
+    nameText.setLetterSpacing(2.2);
 
     container.add([bg, countText, nameText]);
     this.labelContainer = container;

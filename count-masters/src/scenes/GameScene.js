@@ -305,10 +305,11 @@ export default class GameScene extends Phaser.Scene {
       this.crowd.setPopulation(after);
 
       const difference = after - before;
-      this.audio?.gate(difference >= 0);
+      if (chosen.op === 'mul') this.audio?.multiply();
+      else this.audio?.gate(difference >= 0);
 
       UI.floatingText(this, chosen.gate.x, pair.y + 30, `${difference >= 0 ? '+' : ''}${difference}`, {
-        color: difference >= 0 ? '#2ee6a8' : '#ff5f6d',
+        color: difference >= 0 ? '#35e0d0' : '#c4543a',
         size: 48,
         duration: 950,
       });
@@ -331,8 +332,9 @@ export default class GameScene extends Phaser.Scene {
       hazard.markResolved(hit);
 
       if (!hit) {
+        this.audio?.dodge();
         UI.floatingText(this, this.playerX, this.playerY - 20, '¡ESQUIVADO!', {
-          color: '#7cf5d2',
+          color: '#35e0d0',
           size: 28,
           duration: 800,
         });
@@ -343,10 +345,11 @@ export default class GameScene extends Phaser.Scene {
       const after = applyHazardDamage(this.crowd.population, loss);
       this.crowd.setPopulation(after);
 
+      if (hazard.config.type === 'blade') this.audio?.whoosh();
       this.audio?.hazard();
       this.cameras.main.shake(180, 0.006);
       UI.floatingText(this, this.playerX, this.playerY - 30, `-${loss}`, {
-        color: '#ff5f6d',
+        color: '#c4543a',
         size: 44,
         duration: 850,
       });
@@ -371,7 +374,7 @@ export default class GameScene extends Phaser.Scene {
     this.coinCount += value;
     this.audio?.coin();
     UI.floatingText(this, coinSprite.x, coinSprite.y - 18, `+${value}`, {
-      color: '#ffc93c',
+      color: '#f2c879',
       size: 30,
       duration: 700,
       rise: 60,
@@ -420,6 +423,7 @@ export default class GameScene extends Phaser.Scene {
         : 0;
 
     const proxy = { t: 0 };
+    let clashClock = 0;
     this.battleTween = this.tweens.add({
       targets: proxy,
       t: 1,
@@ -429,6 +433,13 @@ export default class GameScene extends Phaser.Scene {
         this.crowd.setVisualCount(Math.round(allyStart + (allyEnd - allyStart) * proxy.t));
         enemy.setVisibleCount(Math.round(enemyStart + (enemyEnd - enemyStart) * proxy.t));
         if (Math.random() < 0.2) this.spawnClash(enemy);
+
+        // Chispazos de espadas espaciados: da textura al combate sin saturar.
+        clashClock += this.game.loop.delta ?? 16;
+        if (clashClock > 210) {
+          clashClock = 0;
+          this.audio?.clash();
+        }
       },
       onComplete: () => this.finishBattle(result),
     });
@@ -574,20 +585,29 @@ export default class GameScene extends Phaser.Scene {
   buildHud() {
     const depth = DEPTHS.hud;
 
+    // Marco de bronce del HUD: el mismo acabado que los paneles de menú.
     const bar = this.add.graphics().setScrollFactor(0).setDepth(depth - 1);
-    bar.fillStyle(0x05070f, 0.6);
-    bar.fillRoundedRect(16, 16, 688, 128, 28);
-    bar.lineStyle(2, 0x2a3555, 0.9);
-    bar.strokeRoundedRect(16, 16, 688, 128, 28);
+    bar.fillStyle(0x000000, 0.45);
+    bar.fillRoundedRect(16, 22, 688, 128, 18);
+    bar.fillStyle(0x120c08, 0.88);
+    bar.fillRoundedRect(16, 16, 688, 128, 18);
+    bar.fillStyle(0xffffff, 0.035);
+    bar.fillRoundedRect(18, 18, 684, 44, 16);
+    bar.lineStyle(2, COLORS.bronze, 0.5);
+    bar.strokeRoundedRect(16, 16, 688, 128, 18);
+    bar.lineStyle(1, COLORS.bronze, 0.18);
+    bar.strokeRoundedRect(21, 21, 678, 118, 14);
 
     UI.chip(this, {
       x: 108,
       y: 46,
       width: 156,
       height: 42,
-      text: `NIVEL ${this.level.id}`,
-      fontSize: 18,
+      text: `Nivel ${this.level.id}`,
+      fontSize: 17,
       align: 'center',
+      fill: COLORS.panelLight,
+      stroke: COLORS.bronze,
       depth,
     });
 
@@ -611,9 +631,11 @@ export default class GameScene extends Phaser.Scene {
         y: 46,
         width: 236,
         height: 42,
-        text: `${alliedCount + 1} PUEBLOS EN MARCHA`,
+        text: `${alliedCount + 1} pueblos en marcha`,
         fontSize: 14,
         align: 'center',
+        fill: COLORS.panelLight,
+        stroke: COLORS.bronze,
         depth,
       });
     }
@@ -621,14 +643,14 @@ export default class GameScene extends Phaser.Scene {
     // Población.
     this.add.image(54, 102, 'ally').setScale(0.8).setScrollFactor(0).setDepth(depth);
     this.hud.populationText = this.add
-      .text(76, 102, String(this.crowd.population), textStyle({ size: 40 }))
+      .text(76, 100, String(this.crowd.population), textStyle({ size: 42, display: true }))
       .setOrigin(0, 0.5)
       .setScrollFactor(0)
       .setDepth(depth);
 
     this.hud.populationCaption = this.add
-      .text(78, 128, 'TU MULTITUD', {
-        ...textStyle({ size: 11, color: '#8fa3c8', bold: true }),
+      .text(79, 128, 'EN MARCHA', {
+        ...textStyle({ size: 11, color: '#a2937e', bold: true, letterSpacing: 2 }),
       })
       .setOrigin(0, 0.5)
       .setScrollFactor(0)
@@ -638,7 +660,7 @@ export default class GameScene extends Phaser.Scene {
     // Monedas.
     this.add.image(592, 102, 'coin').setScale(0.72).setScrollFactor(0).setDepth(depth);
     this.hud.coinText = this.add
-      .text(612, 102, String(this.coinCount), textStyle({ size: 26, color: '#ffd166' }))
+      .text(612, 101, String(this.coinCount), textStyle({ size: 26, color: '#f2c879', display: true }))
       .setOrigin(0, 0.5)
       .setScrollFactor(0)
       .setDepth(depth);
@@ -654,14 +676,14 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.hud.progressText = this.add
-      .text(676, 170, '0 %', textStyle({ size: 15, color: '#8fa3c8' }))
+      .text(676, 170, '0 %', textStyle({ size: 15, color: '#a2937e' }))
       .setOrigin(0, 0.5)
       .setScrollFactor(0)
       .setDepth(depth);
 
     this.hud.metaText = this.add
       .text(40, 170, 'META', {
-        ...textStyle({ size: 13, color: '#8fa3c8', bold: true }),
+        ...textStyle({ size: 12, color: '#a2937e', bold: true, letterSpacing: 2 }),
       })
       .setOrigin(0, 0.5)
       .setScrollFactor(0)
@@ -678,17 +700,21 @@ export default class GameScene extends Phaser.Scene {
       .setDepth(DEPTHS.hud + 2);
 
     const bg = this.add.graphics();
-    bg.fillStyle(0x1a0e14, 0.92);
-    bg.fillRoundedRect(-240, -50, 480, 100, 26);
-    bg.lineStyle(3, COLORS.enemy, 0.95);
-    bg.strokeRoundedRect(-240, -50, 480, 100, 26);
+    bg.fillStyle(0x000000, 0.45);
+    bg.fillRoundedRect(-240, -44, 480, 100, 16);
+    bg.fillStyle(0x1a0e0a, 0.95);
+    bg.fillRoundedRect(-240, -50, 480, 100, 16);
+    bg.lineStyle(2, COLORS.enemy, 0.9);
+    bg.strokeRoundedRect(-240, -50, 480, 100, 16);
+    bg.lineStyle(1, COLORS.enemy, 0.3);
+    bg.strokeRoundedRect(-235, -45, 470, 90, 12);
 
     const title = this.add
-      .text(0, -20, '¡BATALLA!', textStyle({ size: 30, color: '#ff9a8f' }))
+      .text(0, -20, 'Batalla', textStyle({ size: 30, color: '#e08b7a', display: true }))
       .setOrigin(0.5);
 
     const detail = this.add
-      .text(0, 20, '', textStyle({ size: 20, color: '#ffffff' }))
+      .text(0, 20, '', textStyle({ size: 19, color: '#efe4d2' }))
       .setOrigin(0.5);
 
     container.add([bg, title, detail]);
@@ -739,28 +765,93 @@ export default class GameScene extends Phaser.Scene {
     this.hud.progressText?.setText(`${Math.round(progress * 100)} %`);
   }
 
+  /**
+   * Indicación de control.
+   *
+   * Antes era una línea de texto suelta («Arrastra, toca o usa ← → para
+   * moverte») sin jerarquía ni anclaje visual. Ahora es una tarjeta con el
+   * mismo acabado de bronce que el resto de la interfaz, un pictograma que
+   * muestra el gesto y una sola frase en dos niveles de lectura.
+   */
   showHint() {
-    const hint = this.add
-      .text(
-        360,
-        1210,
-        'Arrastra, toca o usa ← → para moverte',
-        textStyle({ size: 20, color: '#c9d6f5', bold: false }),
-      )
-      .setOrigin(0.5)
-      .setScrollFactor(0)
-      .setDepth(DEPTHS.hud)
-      .setAlpha(0.9);
+    const depth = DEPTHS.hud + 1;
+    const width = 500;
+    const height = 112;
+    const x = 360;
+    const y = 1150;
 
-    this.hintText = hint;
+    const container = this.add
+      .container(x, y)
+      .setScrollFactor(0)
+      .setDepth(depth)
+      .setAlpha(0);
+
+    const plate = this.add.graphics();
+    plate.fillStyle(0x000000, 0.45);
+    plate.fillRoundedRect(-width / 2 + 5, -height / 2 + 6, width, height, 14);
+    plate.fillStyle(0x140e08, 0.94);
+    plate.fillRoundedRect(-width / 2, -height / 2, width, height, 14);
+    plate.fillStyle(0x2a1c10, 0.6);
+    plate.fillRoundedRect(-width / 2, -height / 2, width, height * 0.44, 14);
+    plate.lineStyle(2, COLORS.bronze, 0.9);
+    plate.strokeRoundedRect(-width / 2, -height / 2, width, height, 14);
+    plate.lineStyle(1, COLORS.bronze, 0.28);
+    plate.strokeRoundedRect(-width / 2 + 5, -height / 2 + 5, width - 10, height - 10, 11);
+
+    // Pictograma: una pista horizontal con el pulgar en el centro y dos
+    // flechas hacia los lados. Se entiende sin leer.
+    const icon = this.add.graphics();
+    const ix = -width / 2 + 54;
+    icon.fillStyle(COLORS.bronze, 0.22);
+    icon.fillRoundedRect(ix - 30, -6, 60, 12, 6);
+    icon.lineStyle(1, COLORS.bronze, 0.5);
+    icon.strokeRoundedRect(ix - 30, -6, 60, 12, 6);
+    icon.fillStyle(COLORS.gold, 0.95);
+    icon.fillCircle(ix, 0, 11);
+    icon.fillStyle(0x140e08, 1);
+    icon.fillCircle(ix, 0, 5);
+    icon.fillStyle(COLORS.bone, 0.75);
+    icon.fillTriangle(ix - 38, 0, ix - 28, -6, ix - 28, 6);
+    icon.fillTriangle(ix + 38, 0, ix + 28, -6, ix + 28, 6);
+
+    const textX = -width / 2 + 100;
+
+    const title = this.add
+      .text(textX, -32, 'MUÉVETE', {
+        ...textStyle({ size: 12, color: '#c98a3c', bold: true, letterSpacing: 2.4 }),
+      })
+      .setOrigin(0, 0.5);
+
+    const bodyA = this.add
+      .text(textX, -4, 'Arrastra el dedo o el ratón', {
+        ...textStyle({ size: 19, color: '#efe4d2' }),
+      })
+      .setOrigin(0, 0.5);
+
+    const bodyB = this.add
+      .text(textX, 24, 'También sirven las flechas  ←  →', {
+        ...textStyle({ size: 16, color: '#a2937e' }),
+      })
+      .setOrigin(0, 0.5);
+
+    container.add([plate, icon, title, bodyA, bodyB]);
+    this.hintText = container;
+
+    this.tweens.add({
+      targets: container,
+      alpha: 1,
+      duration: 420,
+      ease: 'Quad.easeOut',
+    });
+
     this.pendingTimers.push(
-      this.time.delayedCall(4200, () => {
-        if (!hint.active) return;
+      this.time.delayedCall(5200, () => {
+        if (!container.active) return;
         this.tweens.add({
-          targets: hint,
+          targets: container,
           alpha: 0,
-          duration: 500,
-          onComplete: () => hint.destroy(),
+          duration: 520,
+          onComplete: () => container.destroy(),
         });
       }),
     );
@@ -788,13 +879,15 @@ export default class GameScene extends Phaser.Scene {
       .setDepth(DEPTHS.toast);
 
     const bg = this.add.graphics();
-    bg.fillStyle(0x05070f, 0.9);
-    bg.fillRoundedRect(-250, -42, 500, 84, 24);
-    bg.lineStyle(3, COLORS.gold, 0.9);
-    bg.strokeRoundedRect(-250, -42, 500, 84, 24);
+    bg.fillStyle(0x000000, 0.45);
+    bg.fillRoundedRect(-250, -36, 500, 84, 16);
+    bg.fillStyle(0x1a1208, 0.95);
+    bg.fillRoundedRect(-250, -42, 500, 84, 16);
+    bg.lineStyle(2, COLORS.gold, 0.85);
+    bg.strokeRoundedRect(-250, -42, 500, 84, 16);
 
     const label = this.add
-      .text(0, 0, message, textStyle({ size: 28, color: '#ffd166' }))
+      .text(0, 0, message, textStyle({ size: 26, color: '#f2c879', display: true }))
       .setOrigin(0.5);
 
     container.add([bg, label]);
@@ -855,7 +948,7 @@ export default class GameScene extends Phaser.Scene {
     });
 
     const title = this.add
-      .text(360, 448, 'PAUSA', textStyle({ size: 44, shadow: true }))
+      .text(360, 448, 'Pausa', textStyle({ size: 44, shadow: true, display: true }))
       .setOrigin(0.5);
 
     const info = this.add
@@ -863,7 +956,7 @@ export default class GameScene extends Phaser.Scene {
         360,
         512,
         `Nivel ${this.level.id} · ${this.crowd.population} integrantes`,
-        textStyle({ size: 19, color: COLORS.textMutedHex, bold: false }),
+        textStyle({ size: 18, color: COLORS.textMutedHex, bold: false }),
       )
       .setOrigin(0.5);
 

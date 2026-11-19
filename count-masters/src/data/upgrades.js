@@ -15,7 +15,7 @@ export const UPGRADES = Object.freeze([
     baseCost: 50,
     costStep: 50,
     effectPerLevel: 5,
-    color: 0x2ee6a8,
+    color: 0x35e0d0,
   }),
   Object.freeze({
     id: 'coinBonus',
@@ -26,7 +26,7 @@ export const UPGRADES = Object.freeze([
     baseCost: 75,
     costStep: 75,
     effectPerLevel: 0.2,
-    color: 0xffc93c,
+    color: 0xf2c879,
   }),
 ]);
 

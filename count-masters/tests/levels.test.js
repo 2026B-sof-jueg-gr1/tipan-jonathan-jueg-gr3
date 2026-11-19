@@ -122,12 +122,12 @@ test('los obstáculos son alcanzables y están separados de las puertas', () => 
         );
       }
 
-      if (hazard.type === 'saw') {
+      if (hazard.type === 'blade') {
         assert.ok(hazard.amplitude > 0);
         assert.ok(hazard.speed > 0);
         assert.ok(hazard.radius > 0);
       }
-      if (hazard.type === 'barrier') {
+      if (hazard.type === 'palisade') {
         assert.ok(hazard.gapWidth >= 150 && hazard.gapWidth <= 400);
         assert.ok(
           hazard.gapCenter - hazard.gapWidth / 2 > GAME_CONFIG.trackLeft &&
@@ -135,7 +135,7 @@ test('los obstáculos son alcanzables y están separados de las puertas', () => 
           `${hazard.id}: el hueco se sale de la pista`,
         );
       }
-      if (hazard.type === 'block') {
+      if (hazard.type === 'boulder') {
         assert.ok(hazard.x >= GAME_CONFIG.trackLeft && hazard.x <= GAME_CONFIG.trackRight);
         assert.ok(hazard.radius > 0);
       }

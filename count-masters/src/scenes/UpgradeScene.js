@@ -54,7 +54,7 @@ export default class UpgradeScene extends Phaser.Scene {
       y: 1190,
       width: 300,
       height: 72,
-      label: 'VOLVER AL MENÚ',
+      label: 'Volver al menú',
       variant: 'secondary',
       fontSize: 22,
       onClick: () => {
@@ -67,59 +67,61 @@ export default class UpgradeScene extends Phaser.Scene {
   }
 
   buildBackground() {
-    const g = this.add.graphics().setDepth(0);
-    g.fillStyle(COLORS.background, 1);
+    const terrain = this.add.tileSprite(0, 0, 720, 1280, 'tile_terrain').setOrigin(0, 0).setDepth(0);
+    terrain.setTint(0x8a7560);
+
+    const g = this.add.graphics().setDepth(1);
+    g.fillStyle(COLORS.overlay, 0.66);
     g.fillRect(0, 0, 720, 1280);
-    for (let i = 0; i < 12; i += 1) {
-      g.fillStyle(i % 2 === 0 ? 0x0e1428 : 0x121935, 1);
-      g.fillRect(0, i * 107, 720, 107);
-    }
-    g.fillStyle(COLORS.gold, 0.07);
+    g.fillStyle(COLORS.gold, 0.06);
     g.fillCircle(360, 140, 260);
   }
 
   buildHeader() {
     UI.button(this, {
-      x: 108,
-      y: 70,
+      x: 106,
+      y: 68,
       width: 168,
-      height: 56,
-      label: '‹ MENÚ',
+      height: 54,
+      label: '‹ Menú',
       variant: 'ghost',
-      fontSize: 20,
+      fontSize: 18,
       onClick: () => {
         this.audio.click();
         this.scene.start('MainMenu');
       },
     });
 
-    UI.panel(this, {
-      x: 623,
-      y: 70,
-      width: 166,
-      height: 56,
-      radius: 28,
+    UI.chip(this, {
+      x: 620,
+      y: 68,
+      width: 172,
+      height: 54,
+      text: String(this.progress.getCoins()),
+      icon: 'coin',
+      iconScale: 0.7,
+      fontSize: 24,
+      align: 'center',
       fill: COLORS.panel,
-      fillAlpha: 0.9,
-      depth: 5,
+      stroke: COLORS.bronze,
+      depth: 6,
     });
-    this.add.image(566, 70, 'coin').setScale(0.8).setDepth(6);
-    this.coinText = this.add
-      .text(590, 70, String(this.progress.getCoins()), textStyle({ size: 27 }))
-      .setOrigin(0, 0.5)
-      .setDepth(6);
 
     this.add
-      .text(360, 170, 'MEJORAS', textStyle({ size: 44, shadow: true }))
+      .text(360, 170, 'Mejoras', textStyle({ size: 42, display: true, shadow: true }))
       .setOrigin(0.5)
       .setDepth(5);
+
+    const rule = this.add.graphics().setDepth(5);
+    rule.fillStyle(COLORS.bronze, 0.5);
+    rule.fillRect(360 - 50, 204, 100, 2);
 
     this.add
       .text(
         360,
-        220,
+        234,
         'Invierte las monedas que ganes en tus partidas',
-        textStyle({ size: 19, color: COLORS.textMutedHex, bold: false }),
+        textStyle({ size: 18, color: COLORS.textMutedHex, bold: false }),
       )
       .setOrigin(0.5)
       .setDepth(5);
@@ -162,7 +164,7 @@ export default class UpgradeScene extends Phaser.Scene {
     );
 
     container.add(
-      this.add.text(166, y - 104, upgrade.name, textStyle({ size: 28 })).setOrigin(0, 0.5),
+      this.add.text(166, y - 104, upgrade.name, textStyle({ size: 27, display: true })).setOrigin(0, 0.5),
     );
 
     container.add(
@@ -177,7 +179,7 @@ export default class UpgradeScene extends Phaser.Scene {
 
     container.add(
       this.add
-        .text(166, y - 6, upgrade.effectLabel, textStyle({ size: 17, color: '#7cf5d2' }))
+        .text(166, y - 6, upgrade.effectLabel, textStyle({ size: 17, color: '#35e0d0' }))
         .setOrigin(0, 0.5),
     );
 
@@ -186,10 +188,10 @@ export default class UpgradeScene extends Phaser.Scene {
     for (let i = 0; i < upgrade.maxLevel; i += 1) {
       const px = 166 + i * 44;
       const filled = i < level;
-      pips.fillStyle(filled ? upgrade.color : 0x232a44, 1);
+      pips.fillStyle(filled ? upgrade.color : 0x2e2116, 1);
       pips.fillRoundedRect(px, y + 26, 34, 12, 6);
       if (!filled) {
-        pips.lineStyle(2, 0x3a4568, 1);
+        pips.lineStyle(2, 0x4a3624, 1);
         pips.strokeRoundedRect(px, y + 26, 34, 12, 6);
       }
     }
@@ -203,7 +205,7 @@ export default class UpgradeScene extends Phaser.Scene {
           maxed ? `Nivel máximo alcanzado (${level}/${upgrade.maxLevel})` : `Coste: ${cost} monedas`,
           textStyle({
             size: 17,
-            color: maxed ? '#7cf5d2' : canAfford ? '#ffc93c' : '#ff9a8f',
+            color: maxed ? '#35e0d0' : canAfford ? '#f2c879' : '#e08b7a',
             bold: true,
           }),
         )
@@ -215,7 +217,7 @@ export default class UpgradeScene extends Phaser.Scene {
       y: y + 74,
       width: 220,
       height: 78,
-      label: maxed ? 'MÁXIMO' : 'MEJORAR',
+      label: maxed ? 'Máximo' : 'Mejorar',
       sublabel: maxed ? null : `Nivel ${level + 1}`,
       variant: maxed ? 'ghost' : canAfford ? 'gold' : 'secondary',
       fontSize: 24,
@@ -239,12 +241,12 @@ export default class UpgradeScene extends Phaser.Scene {
           : result.reason === 'max-level'
             ? 'Ya está al máximo'
             : 'No se pudo comprar';
-      this.showToast(message, '#ff9a8f');
+      this.showToast(message, '#e08b7a');
       return;
     }
 
     this.audio.purchase();
-    this.showToast(`¡${upgrade.name} mejorada!`, '#7cf5d2');
+    this.showToast(`¡${upgrade.name} mejorada!`, '#35e0d0');
     this.time.delayedCall(340, () => this.scene.restart());
   }
 
@@ -253,9 +255,9 @@ export default class UpgradeScene extends Phaser.Scene {
 
     const container = this.add.container(360, 1130).setDepth(DEPTHS.overlay);
     const bg = this.add.graphics();
-    bg.fillStyle(0x05070f, 0.92);
+    bg.fillStyle(0x050302, 0.92);
     bg.fillRoundedRect(-220, -34, 440, 68, 24);
-    bg.lineStyle(2, 0x33406b, 1);
+    bg.lineStyle(2, 0x4a3624, 1);
     bg.strokeRoundedRect(-220, -34, 440, 68, 24);
 
     const label = this.add

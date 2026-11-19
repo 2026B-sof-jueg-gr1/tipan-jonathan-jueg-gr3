@@ -124,7 +124,8 @@ export default class CrowdManager {
   /** Mitad del ancho efectivo de la formación (para límites de pista). */
   get halfWidth() {
     const spacing = CROWD_CONFIG.horizontalSpacing * this.scaleValue;
-    return ((this.columns - 1) / 2) * spacing + 14 * this.scaleValue;
+    // 19 = mitad del ancho de la textura horneada (44 px a 1,4×).
+    return ((this.columns - 1) / 2) * spacing + 19 * this.scaleValue;
   }
 
   /** Rango horizontal permitido para el centro de la formación. */

@@ -4,17 +4,23 @@
  * Todos los elementos se crean con gráficos vectoriales y texto de Phaser, sin
  * imágenes externas. Los botones devuelven un `Container` con estados visuales
  * (normal, hover, pulsado, deshabilitado) y áreas táctiles de tamaño generoso.
+ *
+ * Estilo: madera oscura, bronce y serifa. La interfaz del juego usa la misma
+ * paleta y la misma tipografía que la landing page; un botón azul redondeado
+ * habría delatado que son dos productos distintos.
  */
 
-import { COLORS, DEPTHS, FONT_FAMILY } from '../config/gameConfig.js';
+import { COLORS, DEPTHS, FONT_DISPLAY, FONT_FAMILY } from '../config/gameConfig.js';
+
+const INK = 0x120c08;
 
 export const VARIANTS = Object.freeze({
-  primary: { fill: COLORS.accent, hover: COLORS.accentLight, stroke: 0x9db4ff, text: '#ffffff' },
-  secondary: { fill: COLORS.panelLight, hover: 0x2c3866, stroke: COLORS.panelStroke, text: '#ffffff' },
-  danger: { fill: 0xc23444, hover: 0xe4505f, stroke: 0xff8a95, text: '#ffffff' },
-  ghost: { fill: 0x101733, hover: 0x1d2748, stroke: COLORS.panelStroke, text: '#c9d6f5' },
-  gold: { fill: 0xc99a1e, hover: 0xe8b93a, stroke: COLORS.gold, text: '#1a1305' },
-  gain: { fill: 0x14a37f, hover: 0x1fc79b, stroke: 0x7cf5d2, text: '#04120e' },
+  primary: { fill: 0xb4552f, hover: 0xd4713f, stroke: 0xf2c879, text: '#f7efe0' },
+  secondary: { fill: 0x2a1e14, hover: 0x3b2a1b, stroke: 0x6b4a2f, text: '#efe4d2' },
+  danger: { fill: 0x8e2f4a, hover: 0xa93c5a, stroke: 0xe0a6b4, text: '#ffeef2' },
+  ghost: { fill: 0x120c08, hover: 0x1f150e, stroke: 0x3b2a1b, text: '#a2937e' },
+  gold: { fill: 0xc98a3c, hover: 0xe0a44a, stroke: 0xf2c879, text: '#1a1208' },
+  gain: { fill: 0x2b7f6e, hover: 0x359a86, stroke: 0x3fc9b0, text: '#f0fffb' },
 });
 
 export function textStyle({
@@ -25,17 +31,20 @@ export function textStyle({
   lineSpacing = 4,
   shadow = false,
   family = FONT_FAMILY,
+  display = false,
+  letterSpacing = 0,
 } = {}) {
   const style = {
-    fontFamily: family,
+    fontFamily: display ? FONT_DISPLAY : family,
     fontSize: `${Math.round(size)}px`,
     color,
     fontStyle: bold ? 'bold' : 'normal',
     align,
     lineSpacing,
   };
+  if (letterSpacing) style.letterSpacing = letterSpacing;
   if (shadow) {
-    style.shadow = { offsetX: 0, offsetY: 4, color: '#000000', blur: 10, fill: true };
+    style.shadow = { offsetX: 0, offsetY: 4, color: '#000000', blur: 12, fill: true };
   }
   return style;
 }
@@ -47,11 +56,7 @@ export const UI = {
    * En Phaser 4 `setScrollFactor(x, y)` ya NO acepta el tercer argumento
    * `updateChildren` que existía en Phaser 3, así que hay que propagarlo a mano.
    * Es imprescindible: `InputManager.hitTest` calcula el punto de impacto con el
-   * scrollFactor del HIJO (`px = worldX + scrollX * child.scrollFactorX - scrollX`),
-   * no con el del contenedor. Por eso un HUD con scrollFactor 0 dejaba de
-   * responder en cuanto la cámara se desplazaba. El render multiplica el valor
-   * del hijo por el del contenedor y lo restaura al terminar, de modo que fijar
-   * ambos en 0 no altera el dibujado.
+   * scrollFactor del HIJO, no con el del contenedor.
    */
   fixScrollFactor(container, factor) {
     if (factor === null || factor === undefined) return container;
@@ -64,7 +69,48 @@ export const UI = {
     return container;
   },
 
-  /** Panel redondeado con sombra y borde opcional. */
+  /** Filete horizontal de 1 px: el separador de toda la interfaz. */
+  rule(scene, { x, y, width, color = 0x4a3624, alpha = 0.9, depth = DEPTHS.hud }) {
+    const g = scene.add.graphics().setDepth(depth);
+    g.fillStyle(color, alpha);
+    g.fillRect(x, y, width, 1);
+    return g;
+  },
+
+  /**
+   * Marco de bronce con esquinas marcadas. Es el contenedor base de paneles,
+   * tarjetas y botones: da el acabado de objeto forjado sin añadir imágenes.
+   */
+  frame(g, { x, y, width, height, radius = 20, fill = COLORS.panel, fillAlpha = 0.97, stroke = COLORS.bronze }) {
+    g.fillStyle(0x000000, 0.45);
+    g.fillRoundedRect(x, y + 10, width, height, radius);
+
+    g.fillStyle(fill, fillAlpha);
+    g.fillRoundedRect(x, y, width, height, radius);
+
+    // Degradado superior: la luz entra desde arriba.
+    g.fillStyle(0xffffff, 0.045);
+    g.fillRoundedRect(x + 2, y + 2, width - 4, height * 0.34, radius * 0.8);
+
+    g.lineStyle(2, stroke, 0.85);
+    g.strokeRoundedRect(x, y, width, height, radius);
+
+    // Hairline interior.
+    g.lineStyle(1, stroke, 0.28);
+    g.strokeRoundedRect(x + 5, y + 5, width - 10, height - 10, Math.max(2, radius - 5));
+
+    // Esquinas: pequeños remaches de bronce.
+    const tick = 10;
+    g.fillStyle(stroke, 0.9);
+    [
+      [x + radius * 0.6, y + 3],
+      [x + width - radius * 0.6 - tick, y + 3],
+      [x + radius * 0.6, y + height - 5],
+      [x + width - radius * 0.6 - tick, y + height - 5],
+    ].forEach(([tx, ty]) => g.fillRect(tx, ty, tick, 2));
+  },
+
+  /** Panel con marco de bronce. */
   panel(
     scene,
     {
@@ -72,26 +118,15 @@ export const UI = {
       y,
       width,
       height,
-      radius = 28,
+      radius = 24,
       fill = COLORS.panel,
-      fillAlpha = 0.96,
-      stroke = COLORS.panelStroke,
-      strokeWidth = 3,
+      fillAlpha = 0.97,
+      stroke = COLORS.bronze,
       depth = DEPTHS.hud,
-      shadow = true,
     },
   ) {
     const g = scene.add.graphics().setDepth(depth);
-    if (shadow) {
-      g.fillStyle(0x000000, 0.32);
-      g.fillRoundedRect(x - width / 2, y - height / 2 + 8, width, height, radius);
-    }
-    g.fillStyle(fill, fillAlpha);
-    g.fillRoundedRect(x - width / 2, y - height / 2, width, height, radius);
-    if (stroke !== null) {
-      g.lineStyle(strokeWidth, stroke, 1);
-      g.strokeRoundedRect(x - width / 2, y - height / 2, width, height, radius);
-    }
+    UI.frame(g, { x: x - width / 2, y: y - height / 2, width, height, radius, fill, fillAlpha, stroke });
     return g;
   },
 
@@ -117,24 +152,35 @@ export const UI = {
       label = '',
       sublabel = null,
       variant = 'primary',
-      fontSize = 34,
+      fontSize = 32,
       onClick = null,
       depth = DEPTHS.hud,
       scrollFactor = 0,
+      display = true,
     },
   ) {
     const style = VARIANTS[variant] ?? VARIANTS.primary;
-    const radius = Math.min(28, height / 2);
+    const radius = Math.min(18, height / 2);
     const container = scene.add.container(x, y).setDepth(depth);
     if (scrollFactor !== null) container.setScrollFactor(scrollFactor);
 
     const bg = scene.add.graphics();
     const labelText = scene.add
-      .text(0, sublabel ? -12 : 0, label, textStyle({ size: fontSize, color: style.text }))
+      .text(
+        0,
+        sublabel ? -12 : 0,
+        label,
+        textStyle({
+          size: fontSize,
+          color: style.text,
+          display,
+          letterSpacing: display ? 1.2 : 0,
+        }),
+      )
       .setOrigin(0.5);
     const subText = sublabel
       ? scene.add
-          .text(0, 24, sublabel, textStyle({ size: 17, color: style.text, bold: false }))
+          .text(0, 24, sublabel, textStyle({ size: 16, color: style.text, bold: false }))
           .setOrigin(0.5)
       : null;
 
@@ -146,18 +192,29 @@ export const UI = {
     let state = 'idle';
 
     const draw = () => {
-      const current = !enabled ? 0.45 : state === 'idle' ? 1 : state === 'hover' ? 1 : 0.88;
+      const alpha = !enabled ? 0.42 : state === 'press' ? 0.9 : 1;
       bg.clear();
-      bg.fillStyle(0x000000, 0.35);
-      bg.fillRoundedRect(-width / 2, -height / 2 + 7, width, height, radius);
-      bg.fillStyle(state === 'idle' ? style.fill : style.hover, current);
+
+      // Sombra.
+      bg.fillStyle(0x000000, 0.42);
+      bg.fillRoundedRect(-width / 2, -height / 2 + 8, width, height, radius);
+
+      // Cuerpo.
+      bg.fillStyle(state === 'idle' ? style.fill : style.hover, alpha);
       bg.fillRoundedRect(-width / 2, -height / 2, width, height, radius);
-      bg.lineStyle(3, style.stroke, state === 'idle' ? 0.55 : 1);
+
+      // Luz superior.
+      bg.fillStyle(0xffffff, state === 'idle' ? 0.06 : 0.12);
+      bg.fillRoundedRect(-width / 2 + 3, -height / 2 + 3, width - 6, height * 0.4, radius * 0.7);
+
+      // Bisel de bronce.
+      bg.lineStyle(2, style.stroke, state === 'idle' ? 0.7 : 1);
       bg.strokeRoundedRect(-width / 2, -height / 2, width, height, radius);
-      bg.fillStyle(0xffffff, state === 'idle' ? 0.07 : 0.14);
-      bg.fillRoundedRect(-width / 2 + 8, -height / 2 + 6, width - 16, height * 0.3, radius * 0.6);
-      labelText.setAlpha(enabled ? 1 : 0.6);
-      subText?.setAlpha(enabled ? 0.85 : 0.5);
+      bg.lineStyle(1, style.stroke, 0.25);
+      bg.strokeRoundedRect(-width / 2 + 4, -height / 2 + 4, width - 8, height - 8, Math.max(2, radius - 4));
+
+      labelText.setAlpha(enabled ? 1 : 0.65);
+      subText?.setAlpha(enabled ? 0.82 : 0.5);
     };
 
     const resetPosition = () => {
@@ -216,9 +273,7 @@ export const UI = {
     return container;
   },
 
-  /**
-   * Píldora con icono opcional y texto. Devuelve un Container con setText().
-   */
+  /** Píldora con icono opcional y texto. Devuelve un Container con setText(). */
   chip(
     scene,
     {
@@ -229,12 +284,13 @@ export const UI = {
       text = '',
       icon = null,
       iconScale = 0.7,
-      fontSize = 26,
+      fontSize = 24,
       align = 'left',
       fill = COLORS.panelLight,
-      fillAlpha = 0.95,
+      fillAlpha = 0.96,
       stroke = COLORS.panelStroke,
       textColor = COLORS.textHex,
+      display = false,
       depth = DEPTHS.hud,
       scrollFactor = 0,
     },
@@ -243,8 +299,12 @@ export const UI = {
     if (scrollFactor !== null) container.setScrollFactor(scrollFactor);
 
     const g = scene.add.graphics();
+    g.fillStyle(0x000000, 0.4);
+    g.fillRoundedRect(-width / 2, -height / 2 + 4, width, height, height / 2);
     g.fillStyle(fill, fillAlpha);
     g.fillRoundedRect(-width / 2, -height / 2, width, height, height / 2);
+    g.fillStyle(0xffffff, 0.05);
+    g.fillRoundedRect(-width / 2 + 3, -height / 2 + 3, width - 6, height * 0.42, height / 3);
     g.lineStyle(2, stroke, 0.9);
     g.strokeRoundedRect(-width / 2, -height / 2, width, height, height / 2);
 
@@ -257,7 +317,12 @@ export const UI = {
     }
 
     const label = scene.add
-      .text(textX, 0, text, textStyle({ size: fontSize, color: textColor, bold: true }))
+      .text(
+        textX,
+        0,
+        text,
+        textStyle({ size: fontSize, color: textColor, bold: true, display, letterSpacing: display ? 1 : 0 }),
+      )
       .setOrigin(align === 'left' ? 0 : 0.5, 0.5);
     children.push(label);
 
@@ -279,7 +344,7 @@ export const UI = {
     { color = COLORS.textHex, size = 40, duration = 900, rise = 90, depth = DEPTHS.effects } = {},
   ) {
     const label = scene.add
-      .text(x, y, str, textStyle({ size, color, shadow: true }))
+      .text(x, y, str, textStyle({ size, color, shadow: true, display: true }))
       .setOrigin(0.5)
       .setDepth(depth)
       .setScale(0.6);
@@ -302,9 +367,7 @@ export const UI = {
     return label;
   },
 
-  /**
-   * Barra de progreso. Devuelve un Container con setProgress(0..1).
-   */
+  /** Barra de progreso. Devuelve un Container con setProgress(0..1). */
   progressBar(
     scene,
     {
@@ -313,7 +376,7 @@ export const UI = {
       width = 320,
       height = 14,
       fill = COLORS.gain,
-      track = 0x0a0f1e,
+      track = 0x1a1208,
       depth = DEPTHS.hud,
       scrollFactor = 0,
     },
@@ -327,15 +390,23 @@ export const UI = {
     const draw = () => {
       const clamped = Math.min(1, Math.max(0, value));
       g.clear();
-      g.fillStyle(track, 0.9);
+      g.fillStyle(INK, 0.9);
+      g.fillRoundedRect(-width / 2 - 2, -height / 2 - 2, width + 4, height + 4, (height + 4) / 2);
+      g.fillStyle(track, 0.95);
       g.fillRoundedRect(-width / 2, -height / 2, width, height, height / 2);
       if (clamped > 0.001) {
         g.fillStyle(fill, 1);
         g.fillRoundedRect(-width / 2, -height / 2, Math.max(height, width * clamped), height, height / 2);
-        g.fillStyle(0xffffff, 0.25);
-        g.fillRoundedRect(-width / 2 + 3, -height / 2 + 2, Math.max(0, width * clamped - 6), height * 0.35, height / 4);
+        g.fillStyle(0xffffff, 0.22);
+        g.fillRoundedRect(
+          -width / 2 + 3,
+          -height / 2 + 2,
+          Math.max(0, width * clamped - 6),
+          height * 0.35,
+          height / 4,
+        );
       }
-      g.lineStyle(2, 0x2a3555, 1);
+      g.lineStyle(1, COLORS.bronze, 0.5);
       g.strokeRoundedRect(-width / 2, -height / 2, width, height, height / 2);
     };
 
@@ -350,10 +421,8 @@ export const UI = {
     return container;
   },
 
-  /**
-   * Fondo oscuro a pantalla completa que bloquea la interacción con lo de atrás.
-   */
-  dimmer(scene, { alpha = 0.72, depth = DEPTHS.overlay } = {}) {
+  /** Fondo oscuro a pantalla completa que bloquea la interacción con lo de atrás. */
+  dimmer(scene, { alpha = 0.78, depth = DEPTHS.overlay } = {}) {
     const rect = scene.add
       .rectangle(360, 640, 720, 1280, COLORS.overlay, alpha)
       .setDepth(depth)

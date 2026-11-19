@@ -5,8 +5,12 @@
 
 :root {
   color-scheme: dark;
-  --page-bg: #0b0f1c;
-  --page-glow: #16203c;
+  /* Misma paleta que la landing: piedra oscura, bronce y terracota. */
+  --page-bg: #0a0806;
+  --page-glow: #2a1c10;
+  --bronze: #c98a3c;
+  --gold: #f2c879;
+  --terra: #b4552f;
   /* Ancho exacto del hueco a cada lado del lienzo 9:16.
      El canvas mide min(100vw, 100vh * 9/16), así que el sobrante por lado es
      la mitad de la diferencia. Con esto el muro rocoso queda pegado al borde
@@ -26,7 +30,7 @@ body {
   height: 100%;
   overflow: hidden;
   background: var(--page-bg);
-  font-family: "Trebuchet MS", "Segoe UI", Roboto, system-ui, sans-serif;
+  font-family: Georgia, "Times New Roman", "Iowan Old Style", serif;
   overscroll-behavior: none;
 }
 
@@ -66,10 +70,11 @@ body {
   outline: none;
   /* Bisel de bronce: el lienzo se lee como una tableta dentro del desfiladero. */
   box-shadow:
-    0 0 0 1px rgba(255, 201, 60, 0.22),
-    0 0 0 6px rgba(8, 11, 22, 0.9),
-    0 24px 90px rgba(0, 0, 0, 0.75);
-  border-radius: 4px;
+    0 0 0 1px rgba(201, 138, 60, 0.45),
+    0 0 0 5px rgba(20, 14, 8, 0.95),
+    0 0 0 6px rgba(201, 138, 60, 0.22),
+    0 26px 90px rgba(0, 0, 0, 0.8);
+  border-radius: 3px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -86,14 +91,17 @@ body::before {
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(circle 190px at calc(var(--wall) / 2) 50%, rgba(255, 138, 61, 0.45), transparent 70%),
-    radial-gradient(circle 190px at calc(100vw - var(--wall) / 2) 50%, rgba(255, 138, 61, 0.45), transparent 70%),
-    radial-gradient(circle 64px at calc(var(--wall) / 2) 50%, rgba(255, 224, 170, 0.6), transparent 70%),
-    radial-gradient(circle 64px at calc(100vw - var(--wall) / 2) 50%, rgba(255, 224, 170, 0.6), transparent 70%),
-    radial-gradient(ellipse 70% 45% at 50% 2%, rgba(91, 124, 250, 0.24), transparent 72%),
-    radial-gradient(ellipse 75% 55% at 50% 118%, rgba(0, 0, 0, 0.88), transparent 72%);
+    radial-gradient(circle 190px at calc(var(--wall) / 2) 50%, rgba(180, 85, 47, 0.4), transparent 70%),
+    radial-gradient(circle 190px at calc(100vw - var(--wall) / 2) 50%, rgba(180, 85, 47, 0.4), transparent 70%),
+    radial-gradient(circle 60px at calc(var(--wall) / 2) 50%, rgba(255, 224, 170, 0.55), transparent 70%),
+    radial-gradient(circle 60px at calc(100vw - var(--wall) / 2) 50%, rgba(255, 224, 170, 0.55), transparent 70%),
+    radial-gradient(ellipse 70% 45% at 50% 2%, rgba(201, 138, 60, 0.16), transparent 72%),
+    radial-gradient(ellipse 75% 55% at 50% 118%, rgba(0, 0, 0, 0.9), transparent 72%);
 }
 
+/* Los muros son estratos de roca, no una rejilla: una sola trama casi
+   horizontal con paradas anchas y suaves. La versión anterior cruzaba dos
+   tramas y el hueco lateral parecía papel milimetrado. */
 body::after,
 html::before {
   content: '';
@@ -104,9 +112,16 @@ html::before {
   z-index: 0;
   pointer-events: none;
   background-image:
-    repeating-linear-gradient(102deg, rgba(255, 255, 255, 0.075) 0 1.5px, transparent 1.5px 34px),
-    repeating-linear-gradient(-6deg, rgba(0, 0, 0, 0.5) 0 3px, transparent 3px 58px),
-    linear-gradient(90deg, #03050b 0%, #0b1424 64%, rgba(11, 20, 36, 0) 100%);
+    repeating-linear-gradient(
+      7deg,
+      rgba(0, 0, 0, 0.62) 0 2px,
+      rgba(0, 0, 0, 0.14) 2px 20px,
+      rgba(255, 224, 170, 0.055) 20px 23px,
+      rgba(0, 0, 0, 0.04) 23px 44px,
+      rgba(0, 0, 0, 0.4) 44px 46px,
+      rgba(0, 0, 0, 0.09) 46px 72px
+    ),
+    linear-gradient(90deg, #040302 0%, #150e08 58%, rgba(21, 14, 8, 0) 100%);
 }
 
 body::after {
@@ -135,6 +150,6 @@ noscript {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  color: #ffffff;
+  color: #efe4d2;
   text-align: center;
 }

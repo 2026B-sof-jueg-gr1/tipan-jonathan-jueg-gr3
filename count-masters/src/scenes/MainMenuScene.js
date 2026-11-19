@@ -1,10 +1,13 @@
 /**
  * MainMenuScene: título, acceso a jugar, selección de nivel, mejoras, sonido y
  * reinicio del progreso (con confirmación previa).
+ *
+ * Estilo: la portada de la landing trasladada al lienzo vertical. Misma serifa,
+ * mismo bronce, misma multitud al pie.
  */
 
 import Phaser from 'phaser';
-import { COLORS, DEPTHS, FONT_FAMILY } from '../config/gameConfig.js';
+import { COLORS, DEPTHS } from '../config/gameConfig.js';
 import { LEVEL_COUNT } from '../data/levels.js';
 import { UI, textStyle } from '../ui/UIComponents.js';
 
@@ -29,42 +32,46 @@ export default class MainMenuScene extends Phaser.Scene {
   // ------------------------------------------------------------- escenario
 
   buildBackground() {
-    const g = this.add.graphics().setDepth(0);
-    g.fillStyle(COLORS.background, 1);
+    const terrain = this.add.tileSprite(0, 0, 720, 1280, 'tile_terrain').setOrigin(0, 0).setDepth(0);
+    terrain.setTint(0x9a8570);
+
+    const g = this.add.graphics().setDepth(1);
+    g.fillStyle(COLORS.overlay, 0.62);
     g.fillRect(0, 0, 720, 1280);
 
-    for (let i = 0; i < 10; i += 1) {
-      g.fillStyle(i % 2 === 0 ? 0x0e1428 : 0x111731, 1);
-      g.fillRect(0, i * 128, 720, 128);
-    }
+    // Halo cálido detrás del título. Se construye con la textura `glow` en vez
+    // de círculos planos: los círculos de alfa constante dejaban un disco de
+    // borde duro que se leía como una mancha sucia detrás del logotipo.
+    this.add
+      .image(360, 268, 'glow')
+      .setTint(COLORS.accent)
+      .setScale(4.6)
+      .setAlpha(0.55)
+      .setDepth(1);
+    this.add
+      .image(360, 268, 'glow')
+      .setTint(COLORS.gold)
+      .setScale(2.8)
+      .setAlpha(0.4)
+      .setDepth(1);
 
-    // Halos detrás del título.
-    g.fillStyle(COLORS.accent, 0.1);
-    g.fillCircle(360, 280, 280);
-    g.fillStyle(COLORS.gain, 0.07);
-    g.fillCircle(360, 280, 190);
-    g.fillStyle(COLORS.gold, 0.05);
-    g.fillCircle(360, 280, 120);
+    // Calzada al pie con la multitud marchando.
+    const road = this.add.tileSprite(0, 1140, 720, 140, 'tile_road').setOrigin(0, 0).setDepth(2);
+    road.setAlpha(0.95);
 
-    // Franja de pista con multitud al pie de la pantalla.
-    g.fillStyle(0x232c47, 1);
-    g.fillRect(0, 1150, 720, 130);
-    g.fillStyle(COLORS.gain, 0.85);
-    g.fillRect(0, 1150, 720, 5);
-    for (let x = 16; x < 720; x += 92) {
-      g.fillStyle(COLORS.roadLine, 0.8);
-      g.fillRect(x, 1214, 52, 6);
-    }
+    g.fillStyle(0x000000, 0.45);
+    g.fillRect(0, 1136, 720, 6);
+    g.fillStyle(COLORS.bronze, 0.85);
+    g.fillRect(0, 1140, 720, 3);
 
-    const crowd = [];
-    for (let i = 0; i < 16; i += 1) {
-      const x = 34 + i * 42 + (i % 3) * 5;
-      const y = 1206 + (i % 4) * 12;
+    for (let i = 0; i < 18; i += 1) {
+      const x = 24 + i * 40 + (i % 3) * 6;
+      const y = 1214 + (i % 4) * 12;
       const sprite = this.add
         .image(x, y, 'ally')
         .setOrigin(0.5, 1)
-        .setDepth(2)
-        .setScale(0.85 + (i % 3) * 0.1);
+        .setDepth(3)
+        .setScale(0.62 + (i % 3) * 0.07);
       this.tweens.add({
         targets: sprite,
         y: y - 7,
@@ -73,16 +80,15 @@ export default class MainMenuScene extends Phaser.Scene {
         repeat: -1,
         ease: 'Sine.easeInOut',
       });
-      crowd.push(sprite);
     }
 
-    for (let i = 0; i < 4; i += 1) {
+    for (let i = 0; i < 5; i += 1) {
       const sprite = this.add
-        .image(660 + i * 14, 1246 + (i % 2) * 8, 'enemy')
+        .image(648 + i * 13, 1240 + (i % 2) * 8, 'enemy')
         .setOrigin(0.5, 1)
-        .setDepth(2)
-        .setScale(0.8)
-        .setAlpha(0.85);
+        .setDepth(3)
+        .setScale(0.58)
+        .setAlpha(0.9);
       this.tweens.add({
         targets: sprite,
         y: sprite.y - 5,
@@ -93,97 +99,107 @@ export default class MainMenuScene extends Phaser.Scene {
       });
     }
 
-    // Puertas decorativas que anticipan la mecánica principal.
-    this.buildDecorativeGate(96, 1050, '+10', COLORS.gain);
-    this.buildDecorativeGate(624, 1050, '×2', COLORS.multiply);
+    // Puertas decorativas que anticipan la mecánica principal. Se colocan en
+    // los márgenes, fuera de la columna de botones (180..540), y por debajo del
+    // botón de reinicio: antes se solapaban con ambos y el pie era ilegible.
+    this.buildDecorativeGate(104, 1062, '+40', COLORS.gain, 'REFUERZOS');
+    this.buildDecorativeGate(616, 1062, '×2', COLORS.multiply, 'MULTIPLICA');
   }
 
-  buildDecorativeGate(x, y, label, color) {
-    const g = this.add.graphics().setDepth(1);
-    g.fillStyle(color, 0.1);
-    g.fillRoundedRect(x - 78, y - 54, 156, 108, 12);
-    g.lineStyle(3, color, 0.5);
-    g.strokeRoundedRect(x - 78, y - 54, 156, 108, 12);
-    g.fillStyle(color, 0.7);
-    g.fillRect(x - 78, y - 58, 156, 7);
+  buildDecorativeGate(x, y, label, color, caption) {
+    const g = this.add.graphics().setDepth(4);
+    const w = 136;
+    const h = 104;
+
+    g.fillStyle(0x000000, 0.4);
+    g.fillRoundedRect(x - w / 2, y - h / 2 + 6, w, h, 10);
+
+    g.fillStyle(0x1a1208, 0.94);
+    g.fillRoundedRect(x - w / 2, y - h / 2, w, h, 10);
+
+    g.lineStyle(2, color, 0.85);
+    g.strokeRoundedRect(x - w / 2, y - h / 2, w, h, 10);
+    g.lineStyle(1, color, 0.28);
+    g.strokeRoundedRect(x - w / 2 + 5, y - h / 2 + 5, w - 10, h - 10, 6);
+
+    // Dintel de bronce.
+    g.fillStyle(0x8a5f1e, 1);
+    g.fillRect(x - w / 2 - 8, y - h / 2 - 8, w + 16, 9);
+    g.fillStyle(0xc98a3c, 1);
+    g.fillRect(x - w / 2 - 8, y - h / 2 - 8, w + 16, 4);
 
     this.add
-      .text(x, y, label, textStyle({ size: 44, color: '#ffffff' }))
+      .text(x, y - 8, label, textStyle({ size: 36, color: '#f2c879', display: true }))
       .setOrigin(0.5)
-      .setDepth(1)
-      .setAlpha(0.55);
+      .setDepth(5);
+
+    this.add
+      .text(x, y + 30, caption, textStyle({ size: 11, color: '#a2937e', bold: false, letterSpacing: 1.6 }))
+      .setOrigin(0.5)
+      .setDepth(5);
   }
 
   buildHeader() {
     const coins = this.progress.getCoins();
     const unlocked = this.progress.get().highestUnlockedLevel;
 
-    UI.panel(this, {
+    UI.chip(this, {
       x: 623,
-      y: 70,
-      width: 166,
-      height: 56,
-      radius: 28,
+      y: 68,
+      width: 170,
+      height: 54,
+      text: String(coins),
+      icon: 'coin',
+      iconScale: 0.7,
+      fontSize: 24,
+      align: 'center',
       fill: COLORS.panel,
-      fillAlpha: 0.9,
-      depth: 5,
+      stroke: COLORS.bronze,
+      depth: 6,
     });
-    this.add.image(566, 70, 'coin').setScale(0.8).setDepth(6);
-    this.coinText = this.add
-      .text(590, 70, String(coins), textStyle({ size: 27 }))
-      .setOrigin(0, 0.5)
-      .setDepth(6);
 
     UI.chip(this, {
-      x: 116,
-      y: 70,
-      width: 184,
-      height: 56,
-      text: `NIVEL ${unlocked}/${LEVEL_COUNT}`,
-      fontSize: 21,
+      x: 120,
+      y: 68,
+      width: 190,
+      height: 54,
+      text: `Nivel ${unlocked}/${LEVEL_COUNT}`,
+      fontSize: 19,
       align: 'center',
+      fill: COLORS.panel,
+      stroke: COLORS.bronze,
       depth: 6,
     });
   }
 
   buildTitle() {
     this.add
-      .text(360, 226, 'CROWD', {
-        ...textStyle({ size: 78, shadow: true }),
-        letterSpacing: 6,
-      })
+      .text(360, 214, 'Crowd', textStyle({ size: 76, color: '#efe4d2', display: true, shadow: true }))
       .setOrigin(0.5)
       .setDepth(5);
 
     this.add
-      .text(360, 300, 'CONQUEST', {
-        ...textStyle({ size: 78, color: '#7cf5d2', shadow: true }),
-        letterSpacing: 4,
-      })
+      .text(360, 288, 'Conquest', textStyle({ size: 76, color: '#f2c879', display: true, shadow: true }))
       .setOrigin(0.5)
       .setDepth(5);
 
     const underline = this.add.graphics().setDepth(5);
-    underline.fillStyle(COLORS.gold, 0.95);
-    underline.fillRoundedRect(250, 346, 220, 5, 3);
+    underline.fillStyle(COLORS.bronze, 0.9);
+    underline.fillRect(360 - 96, 336, 192, 2);
 
     this.add
-      .text(360, 382, 'GATE RUSH', {
-        ...textStyle({ size: 34, color: '#ffc93c' }),
-        letterSpacing: 10,
-      })
+      .text(360, 368, 'GATE RUSH', textStyle({ size: 26, color: '#c98a3c', letterSpacing: 12, display: true }))
       .setOrigin(0.5)
       .setDepth(5);
 
     this.add
       .text(
         360,
-        446,
-        'Elige la puerta correcta, multiplica tu multitud\ny conquista el castillo del rey.',
+        438,
+        'El rey resta. Tú multiplicas.\nElige la puerta correcta y llega a la ciudadela.',
         {
-          ...textStyle({ size: 20, color: COLORS.textMutedHex, bold: false }),
+          ...textStyle({ size: 19, color: COLORS.textMutedHex, bold: false, lineSpacing: 10 }),
           align: 'center',
-          lineSpacing: 8,
         },
       )
       .setOrigin(0.5)
@@ -191,20 +207,17 @@ export default class MainMenuScene extends Phaser.Scene {
   }
 
   buildButtons() {
-    const highestUnlocked = Math.min(
-      this.progress.get().highestUnlockedLevel,
-      LEVEL_COUNT,
-    );
+    const highestUnlocked = Math.min(this.progress.get().highestUnlockedLevel, LEVEL_COUNT);
 
     this.playButton = UI.button(this, {
       x: 360,
-      y: 566,
-      width: 400,
+      y: 556,
+      width: 360,
       height: 104,
-      label: 'JUGAR',
+      label: 'Jugar',
       sublabel: `Continuar en el nivel ${highestUnlocked}`,
       variant: 'primary',
-      fontSize: 38,
+      fontSize: 36,
       onClick: () => {
         this.audio.unlock();
         this.audio.click();
@@ -214,12 +227,12 @@ export default class MainMenuScene extends Phaser.Scene {
 
     UI.button(this, {
       x: 360,
-      y: 692,
-      width: 400,
-      height: 92,
-      label: 'SELECCIONAR NIVEL',
+      y: 682,
+      width: 360,
+      height: 84,
+      label: 'Seleccionar nivel',
       variant: 'secondary',
-      fontSize: 27,
+      fontSize: 24,
       onClick: () => {
         this.audio.unlock();
         this.audio.click();
@@ -229,12 +242,12 @@ export default class MainMenuScene extends Phaser.Scene {
 
     UI.button(this, {
       x: 360,
-      y: 802,
-      width: 400,
-      height: 92,
-      label: 'MEJORAS',
+      y: 782,
+      width: 360,
+      height: 84,
+      label: 'Mejoras',
       variant: 'secondary',
-      fontSize: 27,
+      fontSize: 24,
       onClick: () => {
         this.audio.unlock();
         this.audio.click();
@@ -244,40 +257,30 @@ export default class MainMenuScene extends Phaser.Scene {
 
     this.soundButton = UI.button(this, {
       x: 360,
-      y: 912,
-      width: 400,
-      height: 88,
+      y: 880,
+      width: 360,
+      height: 74,
       label: this.soundLabel(),
       variant: 'ghost',
-      fontSize: 24,
+      fontSize: 20,
       onClick: () => this.toggleSound(),
     });
 
     UI.button(this, {
       x: 360,
-      y: 1022,
-      width: 300,
-      height: 64,
+      y: 976,
+      width: 280,
+      height: 58,
       label: 'Reiniciar progreso',
       variant: 'ghost',
-      fontSize: 20,
+      fontSize: 17,
       onClick: () => this.openResetConfirm(),
     });
-
-    this.add
-      .text(
-        360,
-        1094,
-        'Proyecto académico original · Phaser 4.2.1 · No afiliado a Count Masters',
-        textStyle({ size: 14, color: '#66779c', bold: false }),
-      )
-      .setOrigin(0.5)
-      .setDepth(5);
   }
 
   soundLabel() {
     const enabled = this.progress.get().settings.soundEnabled;
-    return enabled ? 'SONIDO: ACTIVADO' : 'SONIDO: DESACTIVADO';
+    return enabled ? 'Sonido: activado' : 'Sonido: desactivado';
   }
 
   toggleSound() {
@@ -297,18 +300,18 @@ export default class MainMenuScene extends Phaser.Scene {
 
     const container = this.add.container(0, 0).setDepth(DEPTHS.overlay).setScrollFactor(0);
 
-    const dim = this.add.rectangle(360, 640, 720, 1280, COLORS.overlay, 0.78).setInteractive();
+    const dim = this.add.rectangle(360, 640, 720, 1280, COLORS.overlay, 0.8).setInteractive();
     const panel = UI.panel(this, {
       x: 360,
       y: 620,
       width: 600,
       height: 400,
-      radius: 34,
+      radius: 20,
       depth: DEPTHS.overlay + 1,
     });
 
     const title = this.add
-      .text(360, 512, '¿Reiniciar progreso?', textStyle({ size: 34 }))
+      .text(360, 512, '¿Reiniciar progreso?', textStyle({ size: 32, display: true }))
       .setOrigin(0.5);
     const body = this.add
       .text(
@@ -316,7 +319,7 @@ export default class MainMenuScene extends Phaser.Scene {
         600,
         'Se borrarán las monedas, los niveles desbloqueados\ny las mejoras compradas. Esta acción no se puede deshacer.',
         {
-          ...textStyle({ size: 20, color: COLORS.textMutedHex, bold: false }),
+          ...textStyle({ size: 19, color: COLORS.textMutedHex, bold: false }),
           align: 'center',
           lineSpacing: 8,
           wordWrap: { width: 500 },
@@ -329,9 +332,9 @@ export default class MainMenuScene extends Phaser.Scene {
       y: 730,
       width: 220,
       height: 80,
-      label: 'CANCELAR',
+      label: 'Cancelar',
       variant: 'secondary',
-      fontSize: 22,
+      fontSize: 21,
       onClick: () => this.closeModal(),
     });
 
@@ -340,9 +343,9 @@ export default class MainMenuScene extends Phaser.Scene {
       y: 730,
       width: 220,
       height: 80,
-      label: 'BORRAR',
+      label: 'Borrar',
       variant: 'danger',
-      fontSize: 22,
+      fontSize: 21,
       onClick: () => {
         this.progress.reset();
         this.audio.setEnabled(true);
