@@ -273,6 +273,63 @@
         position: relative;
       }
 
+      /* ------------------------------------------------ cómo se juega */
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+      }
+
+      .step {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 28px 26px;
+        background: linear-gradient(180deg, rgba(26, 18, 12, 0.92), rgba(10, 8, 6, 0.55));
+      }
+
+      .step .num {
+        display: block;
+        font-family: var(--serif);
+        font-size: 14px;
+        letter-spacing: 0.26em;
+        color: var(--bronze);
+        margin-bottom: 14px;
+      }
+
+      .step h3 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: 21px;
+        margin: 0 0 10px;
+        line-height: 1.25;
+      }
+
+      .step p {
+        font-size: 15.5px;
+        line-height: 1.6;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .step p strong {
+        color: var(--bone);
+        font-weight: 500;
+      }
+
+      .note {
+        font-size: 16px;
+        color: var(--muted);
+        max-width: 760px;
+        margin: 38px 0 0;
+        padding-left: 18px;
+        border-left: 2px solid rgba(201, 138, 60, 0.4);
+      }
+
+      .note strong {
+        color: var(--bone);
+        font-weight: 500;
+      }
+
       .sec-label {
         font-size: 12px;
         letter-spacing: 0.32em;
@@ -635,6 +692,7 @@
       <div class="wrap nav-inner">
         <div class="brand">Crowd Conquest</div>
         <div class="nav-links">
+          <a href="#como-jugar">Cómo se juega</a>
           <a href="#alma">El alma</a>
           <a href="#mecanica">La mecánica</a>
           <a href="#campana">La campaña</a>
@@ -702,10 +760,61 @@
       </div>
     </header>
 
+    <!-- ------------------------------------------------------ CÓMO SE JUEGA -->
+    <section id="como-jugar">
+      <div class="wrap">
+        <div class="sec-label">I · Cómo se juega</div>
+        <h2>Una pista, dos puertas, una sola decisión</h2>
+
+        <p class="lead">
+          No hay menús, ni inventario, ni turnos. Tu multitud avanza sola por el desfiladero y tú
+          solo decides <strong>hacia qué lado moverte</strong>. Todo lo demás —crecer, encoger,
+          sobrevivir— es la consecuencia directa de esa decisión.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <span class="num">01</span>
+            <h3>Desliza a un lado o a otro</h3>
+            <p>
+              Arrastra el dedo, mueve el ratón o pulsa las flechas <strong>←</strong>
+              <strong>→</strong>. No hay botón de salto ni de ataque: el único control es el
+              lateral.
+            </p>
+          </div>
+
+          <div class="step">
+            <span class="num">02</span>
+            <h3>Elige la puerta con mejor cifra</h3>
+            <p>
+              Cada línea trae dos puertas y solo puedes cruzar una. <strong>+40</strong> suma
+              cuarenta personas, <strong>×2</strong> duplica lo que ya llevas y
+              <strong>−20</strong> te quita veinte.
+            </p>
+          </div>
+
+          <div class="step">
+            <span class="num">03</span>
+            <h3>Llega con más gente que el rey</h3>
+            <p>
+              Al final del camino espera su ejército. Si tu cifra es mayor, ganas la batalla y su
+              pueblo se une al tuyo. Si es menor, te borra del mapa.
+            </p>
+          </div>
+        </div>
+
+        <p class="note">
+          Y en medio, obstáculos: <strong>hojas de bronce</strong> que oscilan sobre la calzada,
+          <strong>estacadas</strong> con un único hueco y <strong>peñascos</strong> caídos en mitad
+          del paso. Cada golpe no se paga con vidas, se paga con personas.
+        </p>
+      </div>
+    </section>
+
     <!-- -------------------------------------------------------- EL ALMA -->
     <section id="alma">
       <div class="wrap">
-        <div class="sec-label">I · El alma del juego</div>
+        <div class="sec-label">II · De qué va esto</div>
         <h2>¿Cómo hacemos que aprender sea divertido y no un castigo?</h2>
 
         <p class="lead">
@@ -727,7 +836,7 @@
     <!-- --------------------------------------------------------- MECÁNICA -->
     <section id="mecanica">
       <div class="wrap">
-        <div class="sec-label">II · Resonancia ludonarrativa</div>
+        <div class="sec-label">III · Las tres puertas</div>
         <h2>Tres puertas, una sola decisión</h2>
 
         <p class="lead">
@@ -778,7 +887,7 @@
     <!-- -------------------------------------------------------- LA CAMPAÑA -->
     <section id="campana">
       <div class="wrap">
-        <div class="sec-label">III · La campaña</div>
+        <div class="sec-label">IV · La campaña</div>
         <h2>No conquistas reinos: los confederas</h2>
 
         <p class="lead">
@@ -879,7 +988,7 @@
     <!-- ------------------------------------------------------- CARACTERÍSTICAS -->
     <section>
       <div class="wrap">
-        <div class="sec-label">IV · Lo que encontrarás</div>
+        <div class="sec-label">V · Lo que encontrarás</div>
         <h2>Un runner, no un simulador</h2>
 
         <div class="features">
@@ -914,7 +1023,7 @@
     <!-- ------------------------------------------------------------ LEGAL -->
     <section id="legal">
       <div class="wrap">
-        <div class="sec-label">V · Las reglas del mundo real</div>
+        <div class="sec-label">VI · Las reglas del mundo real</div>
         <h2>Marco legal, con estilo</h2>
 
         <div class="legal-grid">
@@ -964,7 +1073,7 @@
     <!-- ------------------------------------------------------- MURO DE HONOR -->
     <section id="honor">
       <div class="wrap">
-        <div class="sec-label">VI · Muro de honor</div>
+        <div class="sec-label">VII · Muro de honor</div>
         <h2>Cero assets externos</h2>
 
         <p class="lead">
