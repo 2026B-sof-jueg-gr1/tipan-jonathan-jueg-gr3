@@ -16,6 +16,11 @@ que lo presenta (en `index.html`). Todo se publica automáticamente en GitHub Pa
 .
 ├── index.html                  # Landing page (se publica en la raíz del sitio)
 ├── .github/workflows/deploy.yml# CI/CD: compila, prueba, publica y sube a itch.io
+├── presentacion/               # Diapositivas para exponer el avance (Taller T.05)
+│   └── CrowdConquest-Presentacion/
+│       ├── CrowdConquest-Presentacion.pptx
+│       ├── DESIGN.md           # Guion visual: paleta, tipografía y las 12 páginas
+│       └── assets/             # Capturas reales del juego y de la landing
 └── count-masters/              # El juego (Phaser 4 + Vite)
     ├── src/
     ├── tests/
@@ -45,6 +50,16 @@ Ya no se despliega a mano. Cada `push` a `main` dispara el workflow
 6. sube el mismo build a itch.io con Butler (si está configurado).
 
 > En GitHub: **Settings → Pages → Branch: `gh-pages` / (root)**.
+
+---
+
+## Presentación del avance
+
+`presentacion/CrowdConquest-Presentacion/CrowdConquest-Presentacion.pptx` son 12
+diapositivas en 16:9 para exponer el taller: el alma del juego, la resonancia
+ludonarrativa, las tres operaciones, el umbral de 150, la campaña de cohortes, el
+marco legal, la landing y la fábrica automática. `DESIGN.md` documenta la paleta,
+la tipografía y el guion de cada página; `slides/` guarda la fuente de cada una.
 
 ---
 
